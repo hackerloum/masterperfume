@@ -1,0 +1,14 @@
+rules_version = '2';
+
+// Master Perfume Firebase Storage rules.
+// Product images are publicly readable. Uploads happen from the admin
+// dashboard. Tighten write access before production (e.g. require admin auth).
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /products/{allPaths=**} {
+      allow read: if true;
+      // TODO: restrict to authenticated admins before production.
+      allow write: if true;
+    }
+  }
+}

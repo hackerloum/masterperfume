@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-cream text-ink font-sans antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-serif;
+  }
+}
+
+@layer components {
+  /* Primary gold button */
+  .btn-gold {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-gold px-6 py-3
+      font-medium text-ink shadow-sm transition
+      hover:bg-gold-dark hover:text-white active:scale-[0.98]
+      disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  /* Dark/outline button */
+  .btn-dark {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-ink px-6 py-3
+      font-medium text-white transition hover:bg-charcoal active:scale-[0.98]
+      disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-ink/20
+      bg-white px-6 py-3 font-medium text-ink transition hover:border-gold hover:text-gold-dark;
+  }
+
+  .input-field {
+    @apply w-full rounded-xl border border-ink/15 bg-white px-4 py-3 text-ink
+      placeholder:text-ink/40 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/30;
+  }
+
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-ink/80;
+  }
+
+  .container-px {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
+  }
+
+  .badge {
+    @apply inline-block rounded-full bg-cream px-2.5 py-1 text-xs font-medium text-ink/70;
+  }
+}

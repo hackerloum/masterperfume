@@ -1,0 +1,26 @@
+rules_version = '2';
+
+// Master Perfume Firestore security rules.
+//
+// The storefront has no customer auth: anyone may read products and create
+// orders. Editing/deleting products and reading/updating orders is restricted.
+// Since the admin uses a simple password gate (not Firebase Auth), lock those
+// operations down here and perform admin writes via a trusted environment, OR
+// loosen as needed for your setup. Adjust to your security needs before launch.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /products/{productId} {
+      allow read: if true;
+      // TODO: tighten to authenticated admins before production.
+      allow write: if true;
+    }
+
+    match /orders/{orderId} {
+      // Customers can create orders but not read others' orders.
+      allow create: if true;
+      // TODO: tighten to authenticated admins before production.
+      allow read, update, delete: if true;
+    }
+  }
+}
