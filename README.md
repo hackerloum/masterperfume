@@ -19,7 +19,10 @@ WhatsApp to confirm.
 
 - **Home** — hero, slogan, CTA, featured perfumes, benefits, Instagram handle
 - **Products** — responsive grid with category filter (Men / Women / Unisex)
-- **Product detail** — sizes & prices, quantity, and a no-login order form
+- **Product detail** — interactive **3D bottle preview** (drag to rotate) that
+  reflects the chosen bottle style, size, and the perfume's oil colour, plus a
+  no-login order form. Built for "perfume za kupima": the oil is mixed and
+  poured fresh into the selected bottle.
 - **Checkout** — saves to Firestore, shows a success message, and offers a
   WhatsApp confirmation button with a pre-filled message
 - **Admin** (`/admin`) — password-gated dashboard to:
@@ -64,11 +67,22 @@ WhatsApp to confirm.
 
 ### Data model
 
-**`products`**: `name`, `category`, `description`, `imageUrl`,
-`sizes: [{ sizeMl, price }]`, `isFeatured`, `createdAt`
+**`products`**: `name`, `category`, `description`, `imageUrl`, `oilColor`
+(hex — tints the bottle preview), `sizes: [{ sizeMl, price }]`, `isFeatured`,
+`createdAt`
 
-**`orders`**: `productId`, `productName`, `selectedSize`, `price`, `quantity`,
-`customerName`, `phone`, `location`, `note`, `status`, `createdAt`
+**`orders`**: `productId`, `productName`, `selectedSize`, `bottleStyle`,
+`price`, `quantity`, `customerName`, `phone`, `location`, `note`, `status`,
+`createdAt`
+
+### 3D bottle preview
+
+The bottles are **procedurally generated** with three.js / react-three-fiber
+(`src/components/bottle/`) — no model files. Each style (Roll-on, Spray
+Atomizer, Classic Flask, Simple Decant) is a revolved glass silhouette in
+`bottleProfiles.ts`; the WebGL canvas is lazy-loaded (`ssr: false`) and
+code-split so listing pages stay fast (they use a lightweight SVG bottle).
+Bottle styles live in `BOTTLE_STYLES` (`src/types/index.ts`) — rename/add there.
 
 ## Deploy to Vercel
 

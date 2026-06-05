@@ -7,14 +7,27 @@ import { createOrder } from "@/lib/orders";
 import { isFirebaseConfigured } from "@/lib/firebase";
 import { buildWhatsAppLink, formatPrice, siteConfig } from "@/lib/config";
 import { IconCheck, IconWhatsApp } from "./icons";
-import type { Product, ProductSize } from "@/types";
+import { BOTTLE_STYLES, type BottleStyle, type Product, type ProductSize } from "@/types";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
-export default function OrderForm({ product }: { product: Product }) {
-  const [size, setSize] = useState<ProductSize | null>(
-    product.sizes[0] ?? null
-  );
+interface Props {
+  product: Product;
+  /** Selected size & bottle style are controlled by the parent so the 3D
+   *  preview stays in sync with the form. */
+  size: ProductSize | null;
+  onSizeChange: (size: ProductSize) => void;
+  style: BottleStyle;
+  onStyleChange: (style: BottleStyle) => void;
+}
+
+export default function OrderForm({
+  product,
+  size,
+  onSizeChange,
+  style,
+  onStyleChange,
+}: Props) {
   const [quantity, setQuantity] = useState(1);
   const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");
@@ -32,6 +45,7 @@ export default function OrderForm({ product }: { product: Product }) {
     return (
       `Hello ${siteConfig.name}! I'd like to place an order:\n\n` +
       `*Perfume:* ${product.name}\n` +
+      `*Bottle:* ${style.name}\n` +
       `*Size:* ${size?.sizeMl}ml\n` +
       `*Quantity:* ${quantity}\n` +
       `*Total:* ${formatPrice(total)}\n\n` +
@@ -56,6 +70,7 @@ export default function OrderForm({ product }: { product: Product }) {
       productId: product.id,
       productName: product.name,
       selectedSize: size.sizeMl,
+      bottleStyle: style.name,
       price: size.price,
       quantity,
       customerName: customerName.trim(),
@@ -117,8 +132,37 @@ export default function OrderForm({ product }: { product: Product }) {
     >
       <h2 className="font-serif text-xl font-600 text-ink">Place your order</h2>
       <p className="mt-1 text-sm text-ink/50">
-        No account needed — just fill in your details.
+        No account needed — just choose your bottle and fill in your details.
       </p>
+
+      {/* Bottle style selector */}
+      <div className="mt-5">
+        <span className="label">Choose bottle</span>
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          {BOTTLE_STYLES.map((b) => {
+            const active = style.id === b.id;
+            return (
+              <button
+                type="button"
+                key={b.id}
+                onClick={() => onStyleChange(b)}
+                className={`rounded-xl border px-3 py-2.5 text-left transition ${
+                  active
+                    ? "border-gold bg-gold/10"
+                    : "border-ink/15 bg-white hover:border-gold/60"
+                }`}
+              >
+                <span className="block text-sm font-semibold text-ink">
+                  {b.name}
+                </span>
+                <span className="block text-[0.7rem] text-ink/50">
+                  {b.hint}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
       {/* Size selector */}
       <div className="mt-5">
@@ -133,7 +177,7 @@ export default function OrderForm({ product }: { product: Product }) {
                 <button
                   type="button"
                   key={s.sizeMl}
-                  onClick={() => setSize(s)}
+                  onClick={() => onSizeChange(s)}
                   className={`rounded-xl border px-4 py-2 text-sm transition ${
                     active
                       ? "border-gold bg-gold/10 text-ink"
@@ -235,7 +279,9 @@ export default function OrderForm({ product }: { product: Product }) {
 
       {/* Total */}
       <div className="mt-5 flex items-center justify-between rounded-xl bg-cream px-4 py-3">
-        <span className="text-sm text-ink/60">Total</span>
+        <span className="text-sm text-ink/60">
+          Total · {style.name}, {size?.sizeMl ?? "—"}ml × {quantity}
+        </span>
         <span className="font-serif text-xl font-700 text-ink">
           {formatPrice(total)}
         </span>

@@ -2,7 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/types";
 import { formatPrice } from "@/lib/config";
-import { IconArrowRight, IconDroplet } from "./icons";
+import { IconArrowRight } from "./icons";
+import BottleSilhouette from "./bottle/BottleSilhouette";
 
 /** Returns the lowest price across a product's sizes ("starting price"). */
 function startingPrice(product: Product): number | null {
@@ -20,18 +21,18 @@ export default function ProductCard({ product }: { product: Product }) {
         transition-all duration-300 hover:-translate-y-1 hover:border-gold/40 hover:shadow-card-hover"
     >
       <div className="relative aspect-[4/5] overflow-hidden">
-        {/* Branded placeholder (always rendered behind the image) */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-sand to-cream">
-          <IconDroplet className="h-10 w-10 text-gold/40" />
-          <span className="mt-2 px-4 text-center font-serif text-sm text-ink/30">
-            {product.name}
-          </span>
+        {/* Tinted bottle preview (always rendered behind any photo) */}
+        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-sand via-cream to-white">
+          <BottleSilhouette
+            oilColor={product.oilColor}
+            className="h-[78%] w-auto drop-shadow-sm transition-transform duration-500 group-hover:scale-105"
+          />
         </div>
 
         {product.imageUrl && (
           <Image
             src={product.imageUrl}
-            alt={product.name}
+            alt=""
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"

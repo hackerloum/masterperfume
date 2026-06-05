@@ -1,22 +1,33 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import Spinner from "./Spinner";
 import OrderForm from "./OrderForm";
+import Bottle3D from "./bottle/Bottle3D";
 import { fetchProduct } from "@/lib/data";
 import { formatPrice } from "@/lib/config";
-import { IconDroplet } from "./icons";
-import type { Product } from "@/types";
+import {
+  BOTTLE_STYLES,
+  type BottleStyle,
+  type Product,
+  type ProductSize,
+} from "@/types";
 
 export default function ProductDetail({ id }: { id: string }) {
   const [product, setProduct] = useState<Product | null | undefined>(undefined);
   const [error, setError] = useState(false);
 
+  // Shared configurator state — drives both the 3D preview and the order form.
+  const [size, setSize] = useState<ProductSize | null>(null);
+  const [style, setStyle] = useState<BottleStyle>(BOTTLE_STYLES[0]);
+
   useEffect(() => {
     fetchProduct(id)
-      .then(setProduct)
+      .then((p) => {
+        setProduct(p);
+        if (p) setSize(p.sizes[0] ?? null);
+      })
       .catch(() => setError(true));
   }, [id]);
 
@@ -59,33 +70,24 @@ export default function ProductDetail({ id }: { id: string }) {
       </nav>
 
       <div className="grid gap-8 lg:grid-cols-2">
-        {/* Image */}
-        <div className="relative aspect-square overflow-hidden rounded-3xl shadow-card">
-          {/* Branded placeholder behind the image */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-sand to-cream">
-            <IconDroplet className="h-16 w-16 text-gold/40" />
-            <span className="mt-3 px-6 text-center font-serif text-xl text-ink/30">
-              {product.name}
-            </span>
-          </div>
-          {product.imageUrl && (
-            <Image
-              src={product.imageUrl}
-              alt={product.name}
-              fill
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
-              priority
-            />
-          )}
-          <span className="absolute left-4 top-4 badge bg-white/90">
-            {product.category}
-          </span>
+        {/* 3D bottle preview */}
+        <div className="lg:sticky lg:top-24 lg:self-start">
+          <Bottle3D
+            style={style.id}
+            oilColor={product.oilColor}
+            sizeMl={size?.sizeMl ?? product.sizes[0]?.sizeMl ?? 50}
+          />
+          <p className="mt-3 text-center text-sm text-ink/50">
+            Previewing <span className="font-medium text-ink/70">{style.name}</span>
+            {size ? ` · ${size.sizeMl}ml` : ""} — your perfume is mixed and poured
+            fresh into this bottle.
+          </p>
         </div>
 
         {/* Info + order */}
         <div>
-          <h1 className="font-serif text-3xl font-700 text-ink sm:text-4xl">
+          <span className="badge bg-cream">{product.category}</span>
+          <h1 className="mt-3 font-serif text-3xl font-700 text-ink sm:text-4xl">
             {product.name}
           </h1>
           {from !== null && (
@@ -98,7 +100,13 @@ export default function ProductDetail({ id }: { id: string }) {
           </p>
 
           <div className="mt-8">
-            <OrderForm product={product} />
+            <OrderForm
+              product={product}
+              size={size}
+              onSizeChange={setSize}
+              style={style}
+              onStyleChange={setStyle}
+            />
           </div>
         </div>
       </div>

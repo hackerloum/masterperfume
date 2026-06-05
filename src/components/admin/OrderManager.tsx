@@ -112,6 +112,7 @@ export default function OrderManager() {
                     {o.productName}
                   </p>
                   <p className="text-sm text-ink/60">
+                    {o.bottleStyle ? `${o.bottleStyle} · ` : ""}
                     {o.selectedSize}ml × {o.quantity} ·{" "}
                     {formatPrice(o.price * o.quantity)}
                   </p>

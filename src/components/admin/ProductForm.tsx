@@ -4,7 +4,15 @@ import { useState } from "react";
 import Image from "next/image";
 import Spinner from "../Spinner";
 import { uploadProductImage } from "@/lib/products";
-import { CATEGORIES, type Category, type Product, type ProductInput, type ProductSize } from "@/types";
+import BottleSilhouette from "../bottle/BottleSilhouette";
+import {
+  CATEGORIES,
+  DEFAULT_OIL_COLOR,
+  type Category,
+  type Product,
+  type ProductInput,
+  type ProductSize,
+} from "@/types";
 
 interface Props {
   /** When provided, the form edits this product; otherwise it creates a new one. */
@@ -21,6 +29,9 @@ export default function ProductForm({ initial, onSave, onCancel }: Props) {
   );
   const [description, setDescription] = useState(initial?.description ?? "");
   const [imageUrl, setImageUrl] = useState(initial?.imageUrl ?? "");
+  const [oilColor, setOilColor] = useState(
+    initial?.oilColor ?? DEFAULT_OIL_COLOR
+  );
   const [isFeatured, setIsFeatured] = useState(initial?.isFeatured ?? false);
   const [sizes, setSizes] = useState<ProductSize[]>(
     initial?.sizes?.length ? initial.sizes : [{ sizeMl: 50, price: 0 }]
@@ -79,6 +90,7 @@ export default function ProductForm({ initial, onSave, onCancel }: Props) {
         category,
         description: description.trim(),
         imageUrl: imageUrl.trim(),
+        oilColor,
         sizes: cleanedSizes,
         isFeatured,
       });
@@ -135,6 +147,32 @@ export default function ProductForm({ initial, onSave, onCancel }: Props) {
             />
             Show on home page (featured)
           </label>
+        </div>
+
+        {/* Oil colour — tints the 3D / 2D bottle preview */}
+        <div className="sm:col-span-2">
+          <label className="label">Perfume oil colour</label>
+          <div className="flex items-center gap-4">
+            <div className="h-16 w-12 shrink-0 overflow-hidden rounded-lg bg-gradient-to-br from-sand to-cream">
+              <BottleSilhouette oilColor={oilColor} className="h-full w-full" />
+            </div>
+            <input
+              type="color"
+              value={oilColor}
+              onChange={(e) => setOilColor(e.target.value)}
+              className="h-10 w-16 cursor-pointer rounded border border-ink/15 bg-white"
+              aria-label="Oil colour"
+            />
+            <input
+              className="input-field max-w-[10rem]"
+              value={oilColor}
+              onChange={(e) => setOilColor(e.target.value)}
+              placeholder="#c9a24b"
+            />
+            <span className="text-xs text-ink/50">
+              Sets the liquid colour customers see in the bottle.
+            </span>
+          </div>
         </div>
 
         <div className="sm:col-span-2">

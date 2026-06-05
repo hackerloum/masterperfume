@@ -22,7 +22,7 @@ import {
   uploadBytes,
 } from "firebase/storage";
 import { db, storage } from "./firebase";
-import type { Product, ProductInput } from "@/types";
+import { DEFAULT_OIL_COLOR, type Product, type ProductInput } from "@/types";
 
 const COLLECTION = "products";
 
@@ -35,6 +35,7 @@ function toProduct(snap: QueryDocumentSnapshot<DocumentData>): Product {
     category: data.category ?? "Unisex",
     description: data.description ?? "",
     imageUrl: data.imageUrl ?? "",
+    oilColor: data.oilColor ?? DEFAULT_OIL_COLOR,
     sizes: Array.isArray(data.sizes) ? data.sizes : [],
     isFeatured: Boolean(data.isFeatured),
     createdAt:

@@ -24,6 +24,7 @@ function toOrder(snap: QueryDocumentSnapshot<DocumentData>): Order {
     productId: data.productId ?? "",
     productName: data.productName ?? "",
     selectedSize: Number(data.selectedSize ?? 0),
+    bottleStyle: data.bottleStyle ?? "",
     price: Number(data.price ?? 0),
     quantity: Number(data.quantity ?? 1),
     customerName: data.customerName ?? "",
