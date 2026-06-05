@@ -5,9 +5,12 @@ import Link from "next/link";
 import AdminGate from "./AdminGate";
 import ProductManager from "./ProductManager";
 import OrderManager from "./OrderManager";
+import BottleManager from "./BottleManager";
 import { isFirebaseConfigured } from "@/lib/firebase";
 
-type Tab = "products" | "orders";
+type Tab = "orders" | "products" | "bottles";
+
+const TABS: Tab[] = ["orders", "products", "bottles"];
 
 export default function AdminDashboard() {
   const [tab, setTab] = useState<Tab>("orders");
@@ -39,7 +42,7 @@ export default function AdminDashboard() {
 
         {/* Tabs */}
         <div className="mt-6 flex gap-2 border-b border-ink/10">
-          {(["orders", "products"] as Tab[]).map((t) => (
+          {TABS.map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
@@ -55,7 +58,9 @@ export default function AdminDashboard() {
         </div>
 
         <div className="mt-6">
-          {tab === "orders" ? <OrderManager /> : <ProductManager />}
+          {tab === "orders" && <OrderManager />}
+          {tab === "products" && <ProductManager />}
+          {tab === "bottles" && <BottleManager />}
         </div>
       </div>
     </AdminGate>

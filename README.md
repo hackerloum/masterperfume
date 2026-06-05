@@ -27,7 +27,9 @@ WhatsApp to confirm.
   WhatsApp confirmation button with a pre-filled message
 - **Admin** (`/admin`) — password-gated dashboard to:
   - add / edit / delete products and upload images
-  - manage sizes & prices, toggle "featured"
+  - manage sizes & prices, set the perfume oil colour, toggle "featured"
+  - **manage bottles**: name, available mills (ml), base 3D shape, and upload a
+    custom GLB model (e.g. exported from Meshy)
   - view orders, change status (pending / contacted / completed)
   - see total orders and estimated sales
 - Mobile-first design, sticky bottom CTA, loading / empty / error states
@@ -75,14 +77,25 @@ WhatsApp to confirm.
 `price`, `quantity`, `customerName`, `phone`, `location`, `note`, `status`,
 `createdAt`
 
-### 3D bottle preview
+### Bottles & 3D preview
 
-The bottles are **procedurally generated** with three.js / react-three-fiber
-(`src/components/bottle/`) — no model files. Each style (Roll-on, Spray
-Atomizer, Classic Flask, Simple Decant) is a revolved glass silhouette in
-`bottleProfiles.ts`; the WebGL canvas is lazy-loaded (`ssr: false`) and
-code-split so listing pages stay fast (they use a lightweight SVG bottle).
-Bottle styles live in `BOTTLE_STYLES` (`src/types/index.ts`) — rename/add there.
+Bottles are managed in the **admin "Bottles" tab** (Firestore `bottles`
+collection): each bottle has a name, the **mills (ml) it's offered in**, a base
+3D shape, and an optional **custom GLB model**. On the product page the customer
+picks a bottle, and the size options shown are the perfume's priced sizes
+limited to that bottle's mills.
+
+- **`bottles`**: `name`, `hint`, `baseStyle`, `modelUrl` (GLB), `sizesMl[]`,
+  `isActive`, `createdAt`.
+- Built-in shapes (Roll-on, Spray Atomizer, Classic Flask, Simple Decant) are
+  **procedurally generated** with three.js / react-three-fiber
+  (`src/components/bottle/bottleProfiles.ts`) — no model files required.
+- Upload a **GLB** (export from Meshy) per bottle to replace the procedural
+  shape; it auto-fits and falls back to the built-in shape if it fails to load.
+- The WebGL canvas is lazy-loaded (`ssr: false`) and code-split; listing pages
+  use a lightweight tinted SVG bottle so they stay fast.
+- Defaults live in `DEFAULT_BOTTLES` (`src/types/index.ts`) and seed via the
+  admin "Seed defaults" button.
 
 ## Deploy to Vercel
 

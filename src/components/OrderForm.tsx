@@ -7,26 +7,31 @@ import { createOrder } from "@/lib/orders";
 import { isFirebaseConfigured } from "@/lib/firebase";
 import { buildWhatsAppLink, formatPrice, siteConfig } from "@/lib/config";
 import { IconCheck, IconWhatsApp } from "./icons";
-import { BOTTLE_STYLES, type BottleStyle, type Product, type ProductSize } from "@/types";
+import { type Bottle, type Product, type ProductSize } from "@/types";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
 interface Props {
   product: Product;
-  /** Selected size & bottle style are controlled by the parent so the 3D
-   *  preview stays in sync with the form. */
+  /** Bottle + size selection are controlled by the parent so the 3D preview
+   *  stays in sync with the form. */
+  bottles: Bottle[];
+  bottle: Bottle | null;
+  onBottleChange: (bottle: Bottle) => void;
+  /** Sizes orderable for the currently selected bottle. */
+  availableSizes: ProductSize[];
   size: ProductSize | null;
   onSizeChange: (size: ProductSize) => void;
-  style: BottleStyle;
-  onStyleChange: (style: BottleStyle) => void;
 }
 
 export default function OrderForm({
   product,
+  bottles,
+  bottle,
+  onBottleChange,
+  availableSizes,
   size,
   onSizeChange,
-  style,
-  onStyleChange,
 }: Props) {
   const [quantity, setQuantity] = useState(1);
   const [customerName, setCustomerName] = useState("");
@@ -45,7 +50,7 @@ export default function OrderForm({
     return (
       `Hello ${siteConfig.name}! I'd like to place an order:\n\n` +
       `*Perfume:* ${product.name}\n` +
-      `*Bottle:* ${style.name}\n` +
+      `*Bottle:* ${bottle?.name ?? "—"}\n` +
       `*Size:* ${size?.sizeMl}ml\n` +
       `*Quantity:* ${quantity}\n` +
       `*Total:* ${formatPrice(total)}\n\n` +
@@ -70,7 +75,7 @@ export default function OrderForm({
       productId: product.id,
       productName: product.name,
       selectedSize: size.sizeMl,
-      bottleStyle: style.name,
+      bottleStyle: bottle?.name ?? "",
       price: size.price,
       quantity,
       customerName: customerName.trim(),
@@ -135,43 +140,49 @@ export default function OrderForm({
         No account needed — just choose your bottle and fill in your details.
       </p>
 
-      {/* Bottle style selector */}
+      {/* Bottle selector */}
       <div className="mt-5">
         <span className="label">Choose bottle</span>
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-          {BOTTLE_STYLES.map((b) => {
-            const active = style.id === b.id;
-            return (
-              <button
-                type="button"
-                key={b.id}
-                onClick={() => onStyleChange(b)}
-                className={`rounded-xl border px-3 py-2.5 text-left transition ${
-                  active
-                    ? "border-gold bg-gold/10"
-                    : "border-ink/15 bg-white hover:border-gold/60"
-                }`}
-              >
-                <span className="block text-sm font-semibold text-ink">
-                  {b.name}
-                </span>
-                <span className="block text-[0.7rem] text-ink/50">
-                  {b.hint}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+        {bottles.length === 0 ? (
+          <p className="text-sm text-ink/50">No bottles available.</p>
+        ) : (
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            {bottles.map((b) => {
+              const active = bottle?.id === b.id;
+              return (
+                <button
+                  type="button"
+                  key={b.id}
+                  onClick={() => onBottleChange(b)}
+                  className={`rounded-xl border px-3 py-2.5 text-left transition ${
+                    active
+                      ? "border-gold bg-gold/10"
+                      : "border-ink/15 bg-white hover:border-gold/60"
+                  }`}
+                >
+                  <span className="block text-sm font-semibold text-ink">
+                    {b.name}
+                  </span>
+                  {b.hint && (
+                    <span className="block text-[0.7rem] text-ink/50">
+                      {b.hint}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* Size selector */}
       <div className="mt-5">
         <span className="label">Select size</span>
-        {product.sizes.length === 0 ? (
+        {availableSizes.length === 0 ? (
           <p className="text-sm text-ink/50">No sizes available.</p>
         ) : (
           <div className="flex flex-wrap gap-2">
-            {product.sizes.map((s) => {
+            {availableSizes.map((s) => {
               const active = size?.sizeMl === s.sizeMl;
               return (
                 <button
@@ -280,7 +291,7 @@ export default function OrderForm({
       {/* Total */}
       <div className="mt-5 flex items-center justify-between rounded-xl bg-cream px-4 py-3">
         <span className="text-sm text-ink/60">
-          Total · {style.name}, {size?.sizeMl ?? "—"}ml × {quantity}
+          Total · {bottle?.name ?? "—"}, {size?.sizeMl ?? "—"}ml × {quantity}
         </span>
         <span className="font-serif text-xl font-700 text-ink">
           {formatPrice(total)}
@@ -295,7 +306,7 @@ export default function OrderForm({
 
       <button
         type="submit"
-        disabled={status === "submitting" || product.sizes.length === 0}
+        disabled={status === "submitting" || availableSizes.length === 0}
         className="btn-gold mt-5 w-full"
       >
         {status === "submitting" ? (

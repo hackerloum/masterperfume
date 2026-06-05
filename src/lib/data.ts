@@ -12,8 +12,9 @@ import {
   getProduct,
   getProducts,
 } from "./products";
+import { getBottles } from "./bottles";
 import { sampleProducts } from "./sampleProducts";
-import type { Product } from "@/types";
+import { DEFAULT_BOTTLES, type Bottle, type Product } from "@/types";
 
 export async function fetchProducts(): Promise<Product[]> {
   if (!isFirebaseConfigured) return sampleProducts;
@@ -38,6 +39,18 @@ export async function fetchFeaturedProducts(): Promise<Product[]> {
   } catch (err) {
     console.error("Falling back to sample featured products:", err);
     return sampleProducts.filter((p) => p.isFeatured);
+  }
+}
+
+/** Active bottles for the storefront, falling back to the built-in defaults. */
+export async function fetchActiveBottles(): Promise<Bottle[]> {
+  if (!isFirebaseConfigured) return DEFAULT_BOTTLES;
+  try {
+    const bottles = (await getBottles()).filter((b) => b.isActive);
+    return bottles.length ? bottles : DEFAULT_BOTTLES;
+  } catch (err) {
+    console.error("Falling back to default bottles:", err);
+    return DEFAULT_BOTTLES;
   }
 }
 

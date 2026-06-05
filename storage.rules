@@ -10,5 +10,12 @@ service firebase.storage {
       // TODO: restrict to authenticated admins before production.
       allow write: if true;
     }
+
+    // 3D bottle models (.glb) uploaded from the admin dashboard.
+    match /bottles/{allPaths=**} {
+      allow read: if true;
+      // TODO: restrict to authenticated admins before production.
+      allow write: if true;
+    }
   }
 }

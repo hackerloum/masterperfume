@@ -7,23 +7,92 @@ export type Category = "Men" | "Women" | "Unisex";
 export const CATEGORIES: Category[] = ["Men", "Women", "Unisex"];
 
 /**
- * Bottle styles the customer can choose from ("perfume za kupima" — the oil is
- * mixed and poured into the chosen bottle/size at order time).
+ * Built-in 3D bottle shapes. Each admin-managed bottle maps to one of these for
+ * its procedural preview, until a custom GLB model (e.g. exported from Meshy)
+ * is uploaded.
  */
 export type BottleStyleId = "rollon" | "spray" | "flask" | "decant";
 
-export interface BottleStyle {
+export interface BottleBaseShape {
   id: BottleStyleId;
   name: string;
-  /** Short hint shown to the customer. */
   hint: string;
 }
 
-export const BOTTLE_STYLES: BottleStyle[] = [
+export const BOTTLE_BASE_SHAPES: BottleBaseShape[] = [
   { id: "rollon", name: "Roll-on", hint: "Slim roller bottle" },
   { id: "spray", name: "Spray Atomizer", hint: "Pump spray bottle" },
   { id: "flask", name: "Classic Flask", hint: "Faceted glass flask" },
   { id: "decant", name: "Simple Decant", hint: "Plain screw-cap vial" },
+];
+
+/**
+ * A bottle the customer can choose ("perfume za kupima" — the oil is mixed and
+ * poured into the chosen bottle/size at order time). Managed in the admin
+ * dashboard (`bottles` collection).
+ */
+export interface Bottle {
+  id: string;
+  name: string;
+  /** Short hint shown under the bottle name. */
+  hint: string;
+  /** Built-in 3D shape used when no custom model is uploaded. */
+  baseStyle: BottleStyleId;
+  /** Optional uploaded GLB model URL (Firebase Storage). */
+  modelUrl: string;
+  /** Volumes (ml) this bottle is offered in. */
+  sizesMl: number[];
+  isActive: boolean;
+  createdAt: number;
+}
+
+export type BottleInput = Omit<Bottle, "id" | "createdAt">;
+
+/**
+ * Default bottles used as a fallback when Firebase isn't configured or the
+ * `bottles` collection is empty, and as seed data for the admin.
+ */
+export const DEFAULT_BOTTLES: Bottle[] = [
+  {
+    id: "default-rollon",
+    name: "Roll-on",
+    hint: "Slim roller bottle",
+    baseStyle: "rollon",
+    modelUrl: "",
+    sizesMl: [3, 6, 12, 30],
+    isActive: true,
+    createdAt: 1,
+  },
+  {
+    id: "default-spray",
+    name: "Spray Atomizer",
+    hint: "Pump spray bottle",
+    baseStyle: "spray",
+    modelUrl: "",
+    sizesMl: [30, 50, 100],
+    isActive: true,
+    createdAt: 2,
+  },
+  {
+    id: "default-flask",
+    name: "Classic Flask",
+    hint: "Faceted glass flask",
+    baseStyle: "flask",
+    modelUrl: "",
+    sizesMl: [30, 50, 100],
+    isActive: true,
+    createdAt: 3,
+  },
+  {
+    id: "default-decant",
+    name: "Simple Decant",
+    hint: "Plain screw-cap vial",
+    baseStyle: "decant",
+    modelUrl: "",
+    sizesMl: [6, 12, 30, 50, 100],
+    isActive: true,
+    createdAt: 4,
+  },
 ];
 
 export const DEFAULT_OIL_COLOR = "#c9a24b"; // warm amber
