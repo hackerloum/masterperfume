@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { buildWhatsAppLink } from "@/lib/config";
+import { IconWhatsApp } from "./icons";
 
 /**
  * Sticky bottom call-to-action shown on mobile only.
@@ -33,10 +34,10 @@ export default function StickyCTA({
           href={buildWhatsAppLink("Hello Master Perfume! I'd like to order.")}
           target="_blank"
           rel="noopener noreferrer"
-          className="btn-dark px-4"
+          className="btn-dark px-5"
           aria-label="Chat on WhatsApp"
         >
-          WhatsApp
+          <IconWhatsApp className="h-5 w-5" />
         </a>
       </div>
     </div>

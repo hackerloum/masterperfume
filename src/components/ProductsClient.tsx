@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import ProductCard from "./ProductCard";
 import Spinner from "./Spinner";
 import { fetchProducts } from "@/lib/data";
@@ -10,9 +11,14 @@ type Filter = "All" | Category;
 const FILTERS: Filter[] = ["All", ...CATEGORIES];
 
 export default function ProductsClient() {
+  const searchParams = useSearchParams();
+  const initialCategory = CATEGORIES.find(
+    (c) => c === searchParams.get("category")
+  );
+
   const [products, setProducts] = useState<Product[] | null>(null);
   const [error, setError] = useState(false);
-  const [filter, setFilter] = useState<Filter>("All");
+  const [filter, setFilter] = useState<Filter>(initialCategory ?? "All");
 
   useEffect(() => {
     fetchProducts()
@@ -27,17 +33,17 @@ export default function ProductsClient() {
   }, [products, filter]);
 
   return (
-    <section className="container-px py-8 pb-28 sm:pb-16">
+    <section className="container-px py-10 pb-28 sm:pb-16">
       {/* Category filter */}
-      <div className="mb-6 flex flex-wrap gap-2">
+      <div className="mb-8 flex flex-wrap justify-center gap-2">
         {FILTERS.map((f) => (
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+            className={`rounded-full px-5 py-2.5 text-sm font-semibold uppercase tracking-wider transition ${
               filter === f
-                ? "bg-ink text-white"
-                : "border border-ink/15 bg-white text-ink/70 hover:border-gold"
+                ? "bg-ink text-white shadow-sm"
+                : "border border-ink/15 bg-white text-ink/60 hover:border-gold hover:text-ink"
             }`}
           >
             {f}
@@ -83,7 +89,7 @@ export default function ProductsClient() {
 
       {/* Grid */}
       {visible.length > 0 && (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4">
           {visible.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}

@@ -6,6 +6,7 @@ import Spinner from "./Spinner";
 import { createOrder } from "@/lib/orders";
 import { isFirebaseConfigured } from "@/lib/firebase";
 import { buildWhatsAppLink, formatPrice, siteConfig } from "@/lib/config";
+import { IconCheck, IconWhatsApp } from "./icons";
 import type { Product, ProductSize } from "@/types";
 
 type Status = "idle" | "submitting" | "success" | "error";
@@ -84,8 +85,10 @@ export default function OrderForm({ product }: { product: Product }) {
   if (status === "success") {
     return (
       <div className="rounded-2xl border border-gold/40 bg-white p-6 text-center shadow-card">
-        <div className="text-4xl">✅</div>
-        <h2 className="mt-3 font-serif text-2xl text-ink">Thank you!</h2>
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-green-700">
+          <IconCheck className="h-7 w-7" />
+        </div>
+        <h2 className="mt-4 font-serif text-2xl text-ink">Thank you!</h2>
         <p className="mt-2 text-ink/70">
           Thank you for your order. We will contact you shortly on WhatsApp.
         </p>
@@ -96,6 +99,7 @@ export default function OrderForm({ product }: { product: Product }) {
           rel="noopener noreferrer"
           className="btn-gold mt-6 w-full"
         >
+          <IconWhatsApp className="h-5 w-5" />
           Confirm on WhatsApp
         </a>
         <Link href="/products" className="btn-outline mt-3 w-full">

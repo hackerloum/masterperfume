@@ -6,6 +6,7 @@ import ProductCard from "./ProductCard";
 import Spinner from "./Spinner";
 import { fetchFeaturedProducts } from "@/lib/data";
 import type { Product } from "@/types";
+import { IconArrowRight } from "./icons";
 
 export default function FeaturedProducts() {
   const [products, setProducts] = useState<Product[] | null>(null);
@@ -18,22 +19,13 @@ export default function FeaturedProducts() {
   }, []);
 
   return (
-    <section className="container-px py-12 sm:py-16">
-      <div className="mb-8 flex items-end justify-between">
-        <div>
-          <p className="text-xs uppercase tracking-[0.3em] text-gold-dark">
-            Hand-picked
-          </p>
-          <h2 className="font-serif text-3xl font-700 text-ink">
-            Featured Perfumes
-          </h2>
-        </div>
-        <Link
-          href="/products"
-          className="hidden text-sm font-medium text-gold-dark hover:underline sm:block"
-        >
-          View all →
-        </Link>
+    <section className="container-px py-16 sm:py-24">
+      <div className="mb-12 text-center">
+        <p className="eyebrow">Hand-picked for you</p>
+        <h2 className="mt-3 font-serif text-4xl font-700 text-ink sm:text-5xl">
+          Featured Perfumes
+        </h2>
+        <div className="gold-rule mt-5" />
       </div>
 
       {/* Loading */}
@@ -59,16 +51,17 @@ export default function FeaturedProducts() {
 
       {/* Grid */}
       {products && products.length > 0 && (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4">
           {products.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
         </div>
       )}
 
-      <div className="mt-8 text-center sm:hidden">
+      <div className="mt-12 text-center">
         <Link href="/products" className="btn-outline">
           View all perfumes
+          <IconArrowRight />
         </Link>
       </div>
     </section>

@@ -1,22 +1,23 @@
-/** Simple trust-building benefits row. */
+import { IconClock, IconDroplet, IconTag, IconTruck } from "./icons";
+
 const benefits = [
   {
-    icon: "⏳",
+    Icon: IconClock,
     title: "Long Lasting",
     text: "Fragrances that stay with you all day.",
   },
   {
-    icon: "🧴",
+    Icon: IconDroplet,
     title: "Perfume za Kupima",
     text: "Buy by measure — pay only for what you need.",
   },
   {
-    icon: "💰",
+    Icon: IconTag,
     title: "Affordable Sizes",
     text: "From small testers to full bottles.",
   },
   {
-    icon: "🚚",
+    Icon: IconTruck,
     title: "Delivery Available",
     text: "We deliver right to your location.",
   },
@@ -24,18 +25,17 @@ const benefits = [
 
 export default function Benefits() {
   return (
-    <section className="container-px py-12 sm:py-16">
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        {benefits.map((b) => (
-          <div
-            key={b.title}
-            className="rounded-2xl border border-ink/10 bg-white p-5 text-center shadow-card"
-          >
-            <div className="text-3xl">{b.icon}</div>
-            <h3 className="mt-3 font-serif text-lg font-600 text-ink">
-              {b.title}
-            </h3>
-            <p className="mt-1 text-sm text-ink/60">{b.text}</p>
+    <section className="border-y border-ink/10 bg-white">
+      <div className="container-px grid grid-cols-2 gap-x-6 gap-y-10 py-14 sm:grid-cols-4">
+        {benefits.map(({ Icon, title, text }) => (
+          <div key={title} className="flex flex-col items-center text-center">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full border border-gold/40 bg-gold/5 text-gold-dark">
+              <Icon className="h-6 w-6" />
+            </div>
+            <h3 className="mt-4 text-base font-semibold text-ink">{title}</h3>
+            <p className="mt-1 max-w-[12rem] text-sm leading-relaxed text-ink/55">
+              {text}
+            </p>
           </div>
         ))}
       </div>

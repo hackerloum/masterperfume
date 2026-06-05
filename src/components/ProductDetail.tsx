@@ -7,6 +7,7 @@ import Spinner from "./Spinner";
 import OrderForm from "./OrderForm";
 import { fetchProduct } from "@/lib/data";
 import { formatPrice } from "@/lib/config";
+import { IconDroplet } from "./icons";
 import type { Product } from "@/types";
 
 export default function ProductDetail({ id }: { id: string }) {
@@ -59,8 +60,15 @@ export default function ProductDetail({ id }: { id: string }) {
 
       <div className="grid gap-8 lg:grid-cols-2">
         {/* Image */}
-        <div className="relative aspect-square overflow-hidden rounded-3xl bg-sand shadow-card">
-          {product.imageUrl ? (
+        <div className="relative aspect-square overflow-hidden rounded-3xl shadow-card">
+          {/* Branded placeholder behind the image */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-sand to-cream">
+            <IconDroplet className="h-16 w-16 text-gold/40" />
+            <span className="mt-3 px-6 text-center font-serif text-xl text-ink/30">
+              {product.name}
+            </span>
+          </div>
+          {product.imageUrl && (
             <Image
               src={product.imageUrl}
               alt={product.name}
@@ -69,10 +77,6 @@ export default function ProductDetail({ id }: { id: string }) {
               className="object-cover"
               priority
             />
-          ) : (
-            <div className="flex h-full items-center justify-center text-ink/30">
-              No image
-            </div>
           )}
           <span className="absolute left-4 top-4 badge bg-white/90">
             {product.category}
