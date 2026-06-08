@@ -182,8 +182,10 @@ export default function BottleManager() {
                   )}
                 </div>
                 <p className="mt-1 text-sm text-ink/50">
-                  {b.sizesMl.length
-                    ? b.sizesMl.map((s) => `${s}ml`).join(" · ")
+                  {b.sizes.length
+                    ? b.sizes
+                        .map((s) => `${s.ml}ml${s.imageUrl ? " 📷" : ""}`)
+                        .join(" · ")
                     : "No sizes"}
                 </p>
               </div>

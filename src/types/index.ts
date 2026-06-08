@@ -31,6 +31,16 @@ export const BOTTLE_BASE_SHAPES: BottleBaseShape[] = [
  * poured into the chosen bottle/size at order time). Managed in the admin
  * dashboard (`bottles` collection).
  */
+/**
+ * A single size (mill) of a bottle, with its own optional photo — the same ml
+ * can come in a different physical bottle, so each size can show its own image.
+ */
+export interface BottleSize {
+  ml: number;
+  /** Optional photo for this specific size (falls back to the bottle's photo). */
+  imageUrl: string;
+}
+
 export interface Bottle {
   id: string;
   name: string;
@@ -38,18 +48,33 @@ export interface Bottle {
   hint: string;
   /** Built-in 3D shape used when no custom model is uploaded. */
   baseStyle: BottleStyleId;
-  /** Optional uploaded photo of the real bottle (Firebase Storage). When set,
-   *  this is shown instead of the 3D preview. */
+  /** Default photo of the real bottle (used when a size has no photo of its own). */
   imageUrl: string;
   /** Optional uploaded GLB model URL (Firebase Storage). */
   modelUrl: string;
-  /** Volumes (ml) this bottle is offered in. */
-  sizesMl: number[];
+  /** Sizes (ml) this bottle is offered in, each with an optional photo. */
+  sizes: BottleSize[];
   isActive: boolean;
   createdAt: number;
 }
 
 export type BottleInput = Omit<Bottle, "id" | "createdAt">;
+
+/** Convenience: the list of volumes (ml) a bottle is offered in. */
+export function bottleVolumes(bottle: Bottle): number[] {
+  return bottle.sizes.map((s) => s.ml);
+}
+
+/** The best photo to show for a bottle at a given ml (size photo → bottle photo). */
+export function bottlePhotoFor(bottle: Bottle, ml?: number): string {
+  const sizePhoto = bottle.sizes.find((s) => s.ml === ml)?.imageUrl;
+  return sizePhoto || bottle.imageUrl || "";
+}
+
+/** Build BottleSize[] from a list of ml values (no per-size photos). */
+function sizesFromMl(...ml: number[]): BottleSize[] {
+  return ml.map((m) => ({ ml: m, imageUrl: "" }));
+}
 
 /**
  * Default bottles used as a fallback when Firebase isn't configured or the
@@ -63,7 +88,7 @@ export const DEFAULT_BOTTLES: Bottle[] = [
     baseStyle: "rollon",
     imageUrl: "",
     modelUrl: "",
-    sizesMl: [3, 6, 12, 30],
+    sizes: sizesFromMl(3,6,12,30),
     isActive: true,
     createdAt: 1,
   },
@@ -74,7 +99,7 @@ export const DEFAULT_BOTTLES: Bottle[] = [
     baseStyle: "spray",
     imageUrl: "",
     modelUrl: "",
-    sizesMl: [30, 50, 100],
+    sizes: sizesFromMl(30,50,100),
     isActive: true,
     createdAt: 2,
   },
@@ -85,7 +110,7 @@ export const DEFAULT_BOTTLES: Bottle[] = [
     baseStyle: "flask",
     imageUrl: "",
     modelUrl: "",
-    sizesMl: [30, 50, 100],
+    sizes: sizesFromMl(30,50,100),
     isActive: true,
     createdAt: 3,
   },
@@ -96,7 +121,7 @@ export const DEFAULT_BOTTLES: Bottle[] = [
     baseStyle: "decant",
     imageUrl: "",
     modelUrl: "",
-    sizesMl: [6, 12, 30, 50, 100],
+    sizes: sizesFromMl(6,12,30,50,100),
     isActive: true,
     createdAt: 4,
   },

@@ -8,7 +8,13 @@ import BottlePreview from "./bottle/BottlePreview";
 import { BACKDROPS } from "./bottle/bottleBackdrops";
 import { fetchActiveBottles, fetchProduct } from "@/lib/data";
 import { formatPrice } from "@/lib/config";
-import { type Bottle, type Product, type ProductSize } from "@/types";
+import {
+  bottlePhotoFor,
+  bottleVolumes,
+  type Bottle,
+  type Product,
+  type ProductSize,
+} from "@/types";
 
 export default function ProductDetail({ id }: { id: string }) {
   const [product, setProduct] = useState<Product | null | undefined>(undefined);
@@ -37,12 +43,17 @@ export default function ProductDetail({ id }: { id: string }) {
    */
   const availableSizes = useMemo<ProductSize[]>(() => {
     if (!product) return [];
-    if (!bottle || !bottle.sizesMl.length) return product.sizes;
-    const matched = product.sizes.filter((s) =>
-      bottle.sizesMl.includes(s.sizeMl)
-    );
+    if (!bottle || !bottle.sizes.length) return product.sizes;
+    const volumes = bottleVolumes(bottle);
+    const matched = product.sizes.filter((s) => volumes.includes(s.sizeMl));
     return matched.length ? matched : product.sizes;
   }, [product, bottle]);
+
+  // The photo to show for the current bottle + size (size photo → bottle photo).
+  const previewImage = useMemo(() => {
+    if (!bottle) return "";
+    return bottlePhotoFor(bottle, size?.sizeMl);
+  }, [bottle, size]);
 
   // Keep the selected size valid whenever the bottle (and thus options) changes.
   useEffect(() => {
@@ -99,7 +110,7 @@ export default function ProductDetail({ id }: { id: string }) {
         {/* 3D bottle preview */}
         <div className="lg:sticky lg:top-24 lg:self-start">
           <BottlePreview
-            imageUrl={bottle?.imageUrl || undefined}
+            imageUrl={previewImage || undefined}
             baseStyle={bottle?.baseStyle ?? "decant"}
             modelUrl={bottle?.modelUrl || undefined}
             oilColor={product.oilColor}
@@ -109,7 +120,7 @@ export default function ProductDetail({ id }: { id: string }) {
           />
 
           {/* Backdrop switcher — only for photo bottles */}
-          {bottle?.imageUrl && (
+          {previewImage && (
             <div className="mt-3 flex items-center justify-center gap-2">
               {BACKDROPS.map((b) => (
                 <button

@@ -16,9 +16,28 @@ import {
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { db, storage } from "./firebase";
-import type { Bottle, BottleInput, BottleStyleId } from "@/types";
+import type { Bottle, BottleInput, BottleSize, BottleStyleId } from "@/types";
 
 const COLLECTION = "bottles";
+
+/** Parse bottle sizes, supporting both the new shape and the legacy sizesMl. */
+function parseSizes(data: DocumentData): BottleSize[] {
+  if (Array.isArray(data.sizes)) {
+    return data.sizes
+      .map((s: { ml?: unknown; imageUrl?: unknown }) => ({
+        ml: Number(s?.ml),
+        imageUrl: typeof s?.imageUrl === "string" ? s.imageUrl : "",
+      }))
+      .filter((s: BottleSize) => s.ml > 0);
+  }
+  // Legacy: sizesMl was a number[]
+  if (Array.isArray(data.sizesMl)) {
+    return data.sizesMl
+      .map((n: unknown) => ({ ml: Number(n), imageUrl: "" }))
+      .filter((s: BottleSize) => s.ml > 0);
+  }
+  return [];
+}
 
 function toBottle(snap: QueryDocumentSnapshot<DocumentData>): Bottle {
   const data = snap.data();
@@ -29,9 +48,7 @@ function toBottle(snap: QueryDocumentSnapshot<DocumentData>): Bottle {
     baseStyle: (data.baseStyle as BottleStyleId) ?? "decant",
     imageUrl: data.imageUrl ?? "",
     modelUrl: data.modelUrl ?? "",
-    sizesMl: Array.isArray(data.sizesMl)
-      ? data.sizesMl.map((n: unknown) => Number(n)).filter((n: number) => n > 0)
-      : [],
+    sizes: parseSizes(data),
     isActive: data.isActive !== false,
     createdAt:
       typeof data.createdAt === "number" ? data.createdAt : Date.now(),
