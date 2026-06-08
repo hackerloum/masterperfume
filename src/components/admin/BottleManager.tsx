@@ -168,13 +168,9 @@ export default function BottleManager() {
                     <span className="badge bg-green-50 text-green-700">
                       Photo
                     </span>
-                  ) : b.modelUrl ? (
-                    <span className="badge bg-green-50 text-green-700">
-                      3D model
-                    </span>
                   ) : (
-                    <span className="badge bg-cream">
-                      {b.baseStyle} shape
+                    <span className="badge bg-amber-50 text-amber-700">
+                      No photo
                     </span>
                   )}
                   {!b.isActive && (
@@ -182,10 +178,8 @@ export default function BottleManager() {
                   )}
                 </div>
                 <p className="mt-1 text-sm text-ink/50">
-                  {b.sizes.length
-                    ? b.sizes
-                        .map((s) => `${s.ml}ml${s.imageUrl ? " 📷" : ""}`)
-                        .join(" · ")
+                  {b.sizesMl.length
+                    ? b.sizesMl.map((s) => `${s}ml`).join(" · ")
                     : "No sizes"}
                 </p>
               </div>

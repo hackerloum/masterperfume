@@ -20,17 +20,15 @@ WhatsApp to confirm.
 
 - **Home** — hero, slogan, CTA, featured perfumes, benefits, Instagram handle
 - **Products** — responsive grid with category filter (Men / Women / Unisex)
-- **Product detail** — interactive **3D bottle preview** (drag to rotate) that
-  reflects the chosen bottle style, size, and the perfume's oil colour, plus a
-  no-login order form. Built for "perfume za kupima": the oil is mixed and
-  poured fresh into the selected bottle.
+- **Product detail** — bottle photo preview with switchable backdrops, size +
+  bottle selection, and a no-login order form. Built for "perfume za kupima":
+  the oil is mixed and poured fresh into the selected bottle.
 - **Checkout** — saves to Firestore, shows a success message, and offers a
   WhatsApp confirmation button with a pre-filled message
 - **Admin** (`/admin`) — password-gated dashboard to:
   - add / edit / delete products and upload images
   - manage sizes & prices, set the perfume oil colour, toggle "featured"
-  - **manage bottles**: name, available mills (ml), base 3D shape, and upload a
-    custom GLB model (e.g. exported from Meshy)
+  - **manage bottles**: each bottle has its own photo and its own sizes (ml)
   - view orders, change status (pending / contacted / completed)
   - see total orders and estimated sales
 - Mobile-first design, sticky bottom CTA, loading / empty / error states
@@ -78,26 +76,18 @@ WhatsApp to confirm.
 `price`, `quantity`, `customerName`, `phone`, `location`, `note`, `status`,
 `createdAt`
 
-### Bottles & 3D preview
+### Bottles
 
 Bottles are managed in the **admin "Bottles" tab** (Firestore `bottles`
-collection): each bottle has a name, the **mills (ml) it's offered in**, a base
-3D shape, and an optional **custom GLB model**. On the product page the customer
-picks a bottle, and the size options shown are the perfume's priced sizes
-limited to that bottle's mills.
+collection). Each bottle is **independent**: its own photo and its own sizes.
+If a size uses a different physical bottle, add it as a separate bottle. On the
+product page the customer picks a bottle, and the size options shown are the
+perfume's priced sizes limited to that bottle's sizes.
 
-- **`bottles`**: `name`, `hint`, `baseStyle`, `imageUrl` (photo), `modelUrl`
-  (GLB), `sizesMl[]`, `isActive`, `createdAt`.
-- **Bottle preview priority**: uploaded **photo** → custom **GLB** → built-in
-  procedural shape. So you can just upload a picture of your real bottle and
-  skip 3D entirely.
-- Built-in shapes (Roll-on, Spray Atomizer, Classic Flask, Simple Decant) are
-  **procedurally generated** with three.js / react-three-fiber
-  (`src/components/bottle/bottleProfiles.ts`) — no model files required.
-- Upload a **GLB** (export from Meshy) per bottle to replace the procedural
-  shape; it auto-fits and falls back to the built-in shape if it fails to load.
-- The WebGL canvas is lazy-loaded (`ssr: false`) and code-split; listing pages
-  use a lightweight tinted SVG bottle so they stay fast.
+- **`bottles`**: `name`, `hint`, `imageUrl` (photo), `sizesMl[]`, `isActive`,
+  `createdAt`.
+- Upload a **transparent PNG** (background removed); the site presents it on
+  switchable **backdrop scenes** (`src/components/bottle/bottleBackdrops.ts`).
 - Defaults live in `DEFAULT_BOTTLES` (`src/types/index.ts`) and seed via the
   admin "Seed defaults" button.
 

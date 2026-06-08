@@ -1,6 +1,6 @@
 /**
- * Firestore CRUD helpers for the `bottles` collection, plus GLB model upload
- * to Firebase Storage. Bottles are managed in the admin dashboard.
+ * Firestore CRUD helpers for the `bottles` collection, plus photo upload to
+ * Firebase Storage. Bottles are managed in the admin dashboard.
  */
 import {
   addDoc,
@@ -16,25 +16,20 @@ import {
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { db, storage } from "./firebase";
-import type { Bottle, BottleInput, BottleSize, BottleStyleId } from "@/types";
+import type { Bottle, BottleInput } from "@/types";
 
 const COLLECTION = "bottles";
 
-/** Parse bottle sizes, supporting both the new shape and the legacy sizesMl. */
-function parseSizes(data: DocumentData): BottleSize[] {
+/** Parse bottle sizes (ml), supporting the legacy per-size object shape. */
+function parseSizes(data: DocumentData): number[] {
+  if (Array.isArray(data.sizesMl)) {
+    return data.sizesMl.map((n: unknown) => Number(n)).filter((n: number) => n > 0);
+  }
+  // Legacy: sizes was [{ ml, imageUrl }]
   if (Array.isArray(data.sizes)) {
     return data.sizes
-      .map((s: { ml?: unknown; imageUrl?: unknown }) => ({
-        ml: Number(s?.ml),
-        imageUrl: typeof s?.imageUrl === "string" ? s.imageUrl : "",
-      }))
-      .filter((s: BottleSize) => s.ml > 0);
-  }
-  // Legacy: sizesMl was a number[]
-  if (Array.isArray(data.sizesMl)) {
-    return data.sizesMl
-      .map((n: unknown) => ({ ml: Number(n), imageUrl: "" }))
-      .filter((s: BottleSize) => s.ml > 0);
+      .map((s: { ml?: unknown }) => Number(s?.ml))
+      .filter((n: number) => n > 0);
   }
   return [];
 }
@@ -45,10 +40,8 @@ function toBottle(snap: QueryDocumentSnapshot<DocumentData>): Bottle {
     id: snap.id,
     name: data.name ?? "",
     hint: data.hint ?? "",
-    baseStyle: (data.baseStyle as BottleStyleId) ?? "decant",
     imageUrl: data.imageUrl ?? "",
-    modelUrl: data.modelUrl ?? "",
-    sizes: parseSizes(data),
+    sizesMl: parseSizes(data),
     isActive: data.isActive !== false,
     createdAt:
       typeof data.createdAt === "number" ? data.createdAt : Date.now(),
@@ -79,18 +72,6 @@ export async function updateBottle(
 
 export async function deleteBottle(id: string): Promise<void> {
   await deleteDoc(doc(db, COLLECTION, id));
-}
-
-/**
- * Upload a GLB bottle model to Firebase Storage and return its download URL.
- * Stored under `bottles/<timestamp>-<filename>`.
- */
-export async function uploadBottleModel(file: File): Promise<string> {
-  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-  const path = `bottles/${Date.now()}-${safeName}`;
-  const storageRef = ref(storage, path);
-  await uploadBytes(storageRef, file);
-  return getDownloadURL(storageRef);
 }
 
 /**
