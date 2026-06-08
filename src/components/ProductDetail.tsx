@@ -5,6 +5,7 @@ import Link from "next/link";
 import Spinner from "./Spinner";
 import OrderForm from "./OrderForm";
 import BottlePreview from "./bottle/BottlePreview";
+import { BACKDROPS } from "./bottle/bottleBackdrops";
 import { fetchActiveBottles, fetchProduct } from "@/lib/data";
 import { formatPrice } from "@/lib/config";
 import { type Bottle, type Product, type ProductSize } from "@/types";
@@ -17,6 +18,7 @@ export default function ProductDetail({ id }: { id: string }) {
   // Shared configurator state — drives both the 3D preview and the order form.
   const [bottle, setBottle] = useState<Bottle | null>(null);
   const [size, setSize] = useState<ProductSize | null>(null);
+  const [backdrop, setBackdrop] = useState(BACKDROPS[0].id);
 
   useEffect(() => {
     Promise.all([fetchProduct(id), fetchActiveBottles()])
@@ -103,7 +105,29 @@ export default function ProductDetail({ id }: { id: string }) {
             oilColor={product.oilColor}
             sizeMl={size?.sizeMl ?? availableSizes[0]?.sizeMl ?? 50}
             name={bottle?.name}
+            backdrop={backdrop}
           />
+
+          {/* Backdrop switcher — only for photo bottles */}
+          {bottle?.imageUrl && (
+            <div className="mt-3 flex items-center justify-center gap-2">
+              {BACKDROPS.map((b) => (
+                <button
+                  key={b.id}
+                  type="button"
+                  onClick={() => setBackdrop(b.id)}
+                  className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${
+                    backdrop === b.id
+                      ? "bg-ink text-white"
+                      : "border border-ink/15 text-ink/60 hover:border-accent"
+                  }`}
+                >
+                  {b.name}
+                </button>
+              ))}
+            </div>
+          )}
+
           <p className="mt-3 text-center text-sm text-ink/50">
             Previewing{" "}
             <span className="font-medium text-ink/70">

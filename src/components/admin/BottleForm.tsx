@@ -166,8 +166,9 @@ export default function BottleForm({ initial, onSave, onCancel }: Props) {
               </div>
             )}
             <p className="mt-1 text-xs text-ink/50">
-              Upload a photo of the real bottle. When set, it&apos;s shown to
-              customers instead of the 3D model.
+              Upload a <strong>transparent PNG</strong> (background removed) of
+              the real bottle. The site presents it on different backdrops so
+              customers see exactly what they get.
             </p>
           </div>
 
