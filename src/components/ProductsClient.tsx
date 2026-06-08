@@ -43,7 +43,7 @@ export default function ProductsClient() {
             className={`rounded-full px-5 py-2.5 text-sm font-semibold uppercase tracking-wider transition ${
               filter === f
                 ? "bg-ink text-white shadow-sm"
-                : "border border-ink/15 bg-white text-ink/60 hover:border-gold hover:text-ink"
+                : "border border-ink/15 bg-white text-ink/60 hover:border-accent hover:text-ink"
             }`}
           >
             {f}

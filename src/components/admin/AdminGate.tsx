@@ -88,7 +88,7 @@ export default function AdminGate({
           </p>
         )}
 
-        <button type="submit" disabled={loading} className="btn-gold mt-5 w-full">
+        <button type="submit" disabled={loading} className="btn-accent mt-5 w-full">
           {loading ? <Spinner className="h-4 w-4" /> : "Enter"}
         </button>
       </form>

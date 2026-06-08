@@ -121,7 +121,7 @@ export default function ProductManager() {
           <button
             onClick={() => setMode({ type: "new" })}
             disabled={!isFirebaseConfigured}
-            className="btn-gold px-4 py-2 text-sm"
+            className="btn-accent px-4 py-2 text-sm"
           >
             + Add product
           </button>
@@ -182,7 +182,7 @@ export default function ProductManager() {
                   <div className="flex items-center gap-2">
                     <p className="truncate font-medium text-ink">{p.name}</p>
                     {p.isFeatured && (
-                      <span className="badge bg-gold/15 text-gold-dark">
+                      <span className="badge bg-accent/15 text-accent-dark">
                         Featured
                       </span>
                     )}
@@ -197,7 +197,7 @@ export default function ProductManager() {
                 <div className="flex shrink-0 gap-1">
                   <button
                     onClick={() => setMode({ type: "edit", product: p })}
-                    className="rounded-lg px-3 py-1.5 text-sm text-ink/70 hover:text-gold-dark"
+                    className="rounded-lg px-3 py-1.5 text-sm text-ink/70 hover:text-accent-dark"
                   >
                     Edit
                   </button>

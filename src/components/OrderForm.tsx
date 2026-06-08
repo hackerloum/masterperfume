@@ -104,7 +104,7 @@ export default function OrderForm({
   // ---- Success state ----
   if (status === "success") {
     return (
-      <div className="rounded-2xl border border-gold/40 bg-white p-6 text-center shadow-card">
+      <div className="rounded-2xl border border-accent/40 bg-white p-6 text-center shadow-card">
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-green-700">
           <IconCheck className="h-7 w-7" />
         </div>
@@ -117,7 +117,7 @@ export default function OrderForm({
           href={whatsAppLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="btn-gold mt-6 w-full"
+          className="btn-accent mt-6 w-full"
         >
           <IconWhatsApp className="h-5 w-5" />
           Confirm on WhatsApp
@@ -156,8 +156,8 @@ export default function OrderForm({
                   onClick={() => onBottleChange(b)}
                   className={`rounded-xl border px-3 py-2.5 text-left transition ${
                     active
-                      ? "border-gold bg-gold/10"
-                      : "border-ink/15 bg-white hover:border-gold/60"
+                      ? "border-accent bg-accent/10"
+                      : "border-ink/15 bg-white hover:border-accent/60"
                   }`}
                 >
                   <span className="block text-sm font-semibold text-ink">
@@ -191,8 +191,8 @@ export default function OrderForm({
                   onClick={() => onSizeChange(s)}
                   className={`rounded-xl border px-4 py-2 text-sm transition ${
                     active
-                      ? "border-gold bg-gold/10 text-ink"
-                      : "border-ink/15 bg-white text-ink/70 hover:border-gold/60"
+                      ? "border-accent bg-accent/10 text-ink"
+                      : "border-ink/15 bg-white text-ink/70 hover:border-accent/60"
                   }`}
                 >
                   <span className="font-medium">{s.sizeMl}ml</span>
@@ -307,7 +307,7 @@ export default function OrderForm({
       <button
         type="submit"
         disabled={status === "submitting" || availableSizes.length === 0}
-        className="btn-gold mt-5 w-full"
+        className="btn-accent mt-5 w-full"
       >
         {status === "submitting" ? (
           <>

@@ -227,7 +227,7 @@ export default function BottleForm({ initial, onSave, onCancel }: Props) {
               type="checkbox"
               checked={isActive}
               onChange={(e) => setIsActive(e.target.checked)}
-              className="h-4 w-4 accent-gold"
+              className="h-4 w-4 accent-accent"
             />
             Active (shown to customers)
           </label>
@@ -252,7 +252,7 @@ export default function BottleForm({ initial, onSave, onCancel }: Props) {
       )}
 
       <div className="mt-5 flex gap-3">
-        <button type="submit" disabled={saving} className="btn-gold">
+        <button type="submit" disabled={saving} className="btn-accent">
           {saving ? <Spinner className="h-4 w-4" /> : "Save bottle"}
         </button>
         <button type="button" onClick={onCancel} className="btn-outline">

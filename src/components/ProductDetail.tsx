@@ -72,7 +72,7 @@ export default function ProductDetail({ id }: { id: string }) {
         <p className="mt-2 text-ink/60">
           This perfume may have been removed or the link is incorrect.
         </p>
-        <Link href="/products" className="btn-gold mt-6">
+        <Link href="/products" className="btn-accent mt-6">
           Back to all perfumes
         </Link>
       </div>
@@ -86,7 +86,7 @@ export default function ProductDetail({ id }: { id: string }) {
   return (
     <article className="container-px py-8 pb-28 sm:pb-16">
       <nav className="mb-6 text-sm text-ink/50">
-        <Link href="/products" className="hover:text-gold-dark">
+        <Link href="/products" className="hover:text-accent-dark">
           Perfumes
         </Link>
         <span className="mx-2">/</span>
@@ -119,7 +119,7 @@ export default function ProductDetail({ id }: { id: string }) {
             {product.name}
           </h1>
           {from !== null && (
-            <p className="mt-2 text-lg text-gold-dark">
+            <p className="mt-2 text-lg text-accent-dark">
               From {formatPrice(from)}
             </p>
           )}

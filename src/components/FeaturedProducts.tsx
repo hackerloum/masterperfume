@@ -25,7 +25,7 @@ export default function FeaturedProducts() {
         <h2 className="mt-3 font-serif text-4xl font-700 text-ink sm:text-5xl">
           Featured Perfumes
         </h2>
-        <div className="gold-rule mt-5" />
+        <div className="accent-rule mt-5" />
       </div>
 
       {/* Loading */}

@@ -143,7 +143,7 @@ export default function ProductForm({ initial, onSave, onCancel }: Props) {
               type="checkbox"
               checked={isFeatured}
               onChange={(e) => setIsFeatured(e.target.checked)}
-              className="h-4 w-4 accent-gold"
+              className="h-4 w-4 accent-accent"
             />
             Show on home page (featured)
           </label>
@@ -271,7 +271,7 @@ export default function ProductForm({ initial, onSave, onCancel }: Props) {
         <button
           type="button"
           onClick={addSize}
-          className="mt-2 text-sm font-medium text-gold-dark hover:underline"
+          className="mt-2 text-sm font-medium text-accent-dark hover:underline"
         >
           + Add size
         </button>
@@ -284,7 +284,7 @@ export default function ProductForm({ initial, onSave, onCancel }: Props) {
       )}
 
       <div className="mt-5 flex gap-3">
-        <button type="submit" disabled={saving} className="btn-gold">
+        <button type="submit" disabled={saving} className="btn-accent">
           {saving ? <Spinner className="h-4 w-4" /> : "Save product"}
         </button>
         <button type="button" onClick={onCancel} className="btn-outline">

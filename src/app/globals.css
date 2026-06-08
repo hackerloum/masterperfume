@@ -8,7 +8,7 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-cream text-ink font-sans antialiased;
+    @apply bg-white text-ink font-sans antialiased;
   }
   h1,
   h2,
@@ -16,64 +16,64 @@
     @apply font-serif tracking-tight;
   }
   ::selection {
-    @apply bg-gold/30 text-ink;
+    @apply bg-accent/20 text-ink;
   }
 }
 
 @layer components {
-  /* Primary gold button */
-  .btn-gold {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-gold px-7 py-3.5
-      text-sm font-semibold uppercase tracking-wider text-ink shadow-sm transition-all
-      duration-200 hover:bg-gold-dark hover:text-white hover:shadow-md active:scale-[0.98]
-      disabled:cursor-not-allowed disabled:opacity-60;
+  /* Primary accent button */
+  .btn-accent {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-accent px-6 py-3
+      text-sm font-medium text-white transition-all duration-200
+      hover:bg-accent-dark active:scale-[0.98]
+      disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   /* Dark button */
   .btn-dark {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-ink px-7 py-3.5
-      text-sm font-semibold uppercase tracking-wider text-white transition-all duration-200
-      hover:bg-charcoal active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-ink px-6 py-3
+      text-sm font-medium text-white transition-all duration-200
+      hover:bg-charcoal active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50;
   }
 
+  /* Outline button */
   .btn-outline {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-ink/20
-      bg-transparent px-7 py-3.5 text-sm font-semibold uppercase tracking-wider text-ink
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-ink/15
+      bg-transparent px-6 py-3 text-sm font-medium text-ink
       transition-all duration-200 hover:border-ink hover:bg-ink hover:text-white;
   }
 
-  /* Ghost/light outline for dark backgrounds */
+  /* Ghost/light outline (kept for compatibility) */
   .btn-ghost-light {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/30
-      bg-transparent px-7 py-3.5 text-sm font-semibold uppercase tracking-wider text-white
-      transition-all duration-200 hover:border-gold hover:text-gold-light;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-ink/15
+      bg-transparent px-6 py-3 text-sm font-medium text-ink
+      transition-all duration-200 hover:border-accent hover:text-accent;
   }
 
   .input-field {
-    @apply w-full rounded-lg border border-ink/15 bg-white px-4 py-3 text-ink
-      transition placeholder:text-ink/40 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20;
+    @apply w-full rounded-lg border border-ink/10 bg-white px-4 py-3 text-ink
+      transition placeholder:text-ink/35 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/15;
   }
 
   .label {
-    @apply mb-1.5 block text-xs font-semibold uppercase tracking-wider text-ink/60;
+    @apply mb-1.5 block text-xs font-medium text-ink/55;
   }
 
   .container-px {
-    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8;
   }
 
   .badge {
-    @apply inline-block rounded-full bg-white/95 px-3 py-1 text-[0.65rem] font-semibold
-      uppercase tracking-wider text-ink/80 shadow-sm;
+    @apply inline-block rounded-full bg-cream px-3 py-1 text-[0.7rem] font-medium text-ink/70;
   }
 
   /* Section eyebrow label */
   .eyebrow {
-    @apply text-xs font-semibold uppercase tracking-[0.3em] text-gold-dark;
+    @apply text-xs font-medium uppercase tracking-[0.2em] text-accent;
   }
 
-  /* Thin gold divider rule */
-  .gold-rule {
-    @apply mx-auto h-px w-16 bg-gold;
+  /* Thin accent divider rule */
+  .accent-rule {
+    @apply mx-auto h-px w-12 bg-accent/40;
   }
 }

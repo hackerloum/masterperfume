@@ -35,7 +35,7 @@ export default function CategoryShowcase() {
           <h2 className="mt-3 font-serif text-4xl font-700 text-ink sm:text-5xl">
             Shop by Category
           </h2>
-          <div className="gold-rule mt-5" />
+          <div className="accent-rule mt-5" />
         </div>
 
         <div className="grid gap-4 sm:grid-cols-3 sm:gap-6">
@@ -57,7 +57,7 @@ export default function CategoryShowcase() {
                 <h3 className="font-serif text-2xl font-700 text-white">
                   {c.name}
                 </h3>
-                <span className="mt-1 inline-flex items-center gap-1.5 text-sm font-medium text-gold-light">
+                <span className="mt-1 inline-flex items-center gap-1.5 text-sm font-medium text-accent-light">
                   Explore collection
                   <IconArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </span>

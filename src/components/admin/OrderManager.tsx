@@ -131,7 +131,7 @@ export default function OrderManager() {
                 </p>
                 <p>
                   <span className="text-ink/40">Phone:</span>{" "}
-                  <a href={`tel:${o.phone}`} className="text-gold-dark">
+                  <a href={`tel:${o.phone}`} className="text-accent-dark">
                     {o.phone}
                   </a>
                 </p>
@@ -157,7 +157,7 @@ export default function OrderManager() {
                   onChange={(e) =>
                     handleStatusChange(o, e.target.value as OrderStatus)
                   }
-                  className="rounded-lg border border-ink/15 bg-white px-3 py-1.5 text-sm capitalize focus:border-gold focus:outline-none"
+                  className="rounded-lg border border-ink/15 bg-white px-3 py-1.5 text-sm capitalize focus:border-accent focus:outline-none"
                 >
                   {ORDER_STATUSES.map((s) => (
                     <option key={s} value={s} className="capitalize">

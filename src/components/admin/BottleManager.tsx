@@ -118,7 +118,7 @@ export default function BottleManager() {
           <button
             onClick={() => setMode({ type: "new" })}
             disabled={!isFirebaseConfigured}
-            className="btn-gold px-4 py-2 text-sm"
+            className="btn-accent px-4 py-2 text-sm"
           >
             + Add bottle
           </button>
@@ -187,7 +187,7 @@ export default function BottleManager() {
               <div className="flex shrink-0 gap-1">
                 <button
                   onClick={() => setMode({ type: "edit", bottle: b })}
-                  className="rounded-lg px-3 py-1.5 text-sm text-ink/70 hover:text-gold-dark"
+                  className="rounded-lg px-3 py-1.5 text-sm text-ink/70 hover:text-accent-dark"
                 >
                   Edit
                 </button>

@@ -22,7 +22,7 @@ export default function ProductsPage() {
           <p className="mx-auto mt-3 max-w-md text-ink/55">
             Find your signature scent. Order in seconds — no account needed.
           </p>
-          <div className="gold-rule mt-5" />
+          <div className="accent-rule mt-5" />
         </div>
       </section>
 

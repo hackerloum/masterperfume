@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/types";
 import { formatPrice } from "@/lib/config";
-import { IconArrowRight } from "./icons";
 import BottleSilhouette from "./bottle/BottleSilhouette";
 
 /** Returns the lowest price across a product's sizes ("starting price"). */
@@ -15,17 +14,13 @@ export default function ProductCard({ product }: { product: Product }) {
   const from = startingPrice(product);
 
   return (
-    <Link
-      href={`/products/${product.id}`}
-      className="group flex flex-col overflow-hidden rounded-xl border border-ink/[0.07] bg-white
-        transition-all duration-300 hover:-translate-y-1 hover:border-gold/40 hover:shadow-card-hover"
-    >
-      <div className="relative aspect-[4/5] overflow-hidden">
-        {/* Tinted bottle preview (always rendered behind any photo) */}
-        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-sand via-cream to-white">
+    <Link href={`/products/${product.id}`} className="group flex flex-col">
+      <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-cream">
+        {/* Tinted bottle preview (behind any photo) */}
+        <div className="absolute inset-0 flex items-center justify-center">
           <BottleSilhouette
             oilColor={product.oilColor}
-            className="h-[78%] w-auto drop-shadow-sm transition-transform duration-500 group-hover:scale-105"
+            className="h-[72%] w-auto transition-transform duration-500 group-hover:scale-105"
           />
         </div>
 
@@ -35,35 +30,27 @@ export default function ProductCard({ product }: { product: Product }) {
             alt=""
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           />
         )}
-        <span className="absolute left-3 top-3 badge">{product.category}</span>
 
-        {/* Hover "Order Now" bar */}
-        <div className="absolute inset-x-0 bottom-0 translate-y-full bg-ink/90 py-3 text-center text-xs font-semibold uppercase tracking-wider text-white backdrop-blur transition-transform duration-300 group-hover:translate-y-0">
-          <span className="inline-flex items-center gap-1.5">
-            Order Now <IconArrowRight className="h-3.5 w-3.5" />
-          </span>
-        </div>
+        <span className="absolute left-3 top-3 badge bg-white/90 backdrop-blur">
+          {product.category}
+        </span>
       </div>
 
-      <div className="flex flex-1 flex-col p-4">
-        <h3 className="font-serif text-lg font-600 leading-tight text-ink transition-colors group-hover:text-gold-dark">
-          {product.name}
-        </h3>
-        <p className="mt-0.5 text-xs uppercase tracking-wider text-ink/40">
-          {product.sizes.map((s) => `${s.sizeMl}ml`).join(" · ")}
-        </p>
-
-        <div className="mt-3 flex items-baseline gap-1.5 pt-1">
-          <span className="text-[0.65rem] uppercase tracking-wide text-ink/40">
-            From
-          </span>
-          <span className="font-serif text-lg font-700 text-ink">
-            {from !== null ? formatPrice(from) : "—"}
-          </span>
+      <div className="flex items-start justify-between gap-3 pt-3">
+        <div className="min-w-0">
+          <h3 className="truncate font-serif text-base font-600 text-ink group-hover:text-accent">
+            {product.name}
+          </h3>
+          <p className="mt-0.5 text-xs text-ink/40">
+            {product.sizes.map((s) => `${s.sizeMl}ml`).join(" · ")}
+          </p>
         </div>
+        <p className="shrink-0 text-sm font-medium text-ink">
+          {from !== null ? formatPrice(from) : "—"}
+        </p>
       </div>
     </Link>
   );

@@ -1,8 +1,9 @@
 import type { Config } from "tailwindcss";
 
 /**
- * Master Perfume brand palette.
- * Luxury but clean: black, gold, cream/light wood, white.
+ * Master Perfume — bright & minimal theme.
+ * White-dominant with a single sage-green accent. To change the accent, edit
+ * the `accent` values below (it's the only brand color used across the site).
  */
 const config: Config = {
   content: [
@@ -12,23 +13,24 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#0d0d0d", // near-black for text & dark sections
-        charcoal: "#1a1a1a",
-        gold: {
-          DEFAULT: "#c9a24b", // primary gold accent
-          light: "#e2c987",
-          dark: "#a9842f",
+        ink: "#0f0f0f", // primary text / near-black
+        charcoal: "#4b4b4b", // secondary text
+        accent: {
+          DEFAULT: "#2f7d63", // sage green
+          light: "#e7f2ed", // light tint for backgrounds
+          dark: "#225f4a", // hover / darker
         },
-        cream: "#f7f1e6", // light wood / cream background
-        sand: "#efe6d4",
+        cream: "#f6f6f4", // subtle light-gray section background
+        sand: "#ececea", // image placeholder background
       },
       fontFamily: {
-        serif: ["var(--font-serif)", "Georgia", "serif"],
+        // Display headings use Manrope; body uses Inter.
+        serif: ["var(--font-display)", "system-ui", "sans-serif"],
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
       },
       boxShadow: {
-        card: "0 6px 24px -8px rgba(0,0,0,0.18)",
-        "card-hover": "0 14px 40px -10px rgba(0,0,0,0.28)",
+        card: "0 1px 2px rgba(0,0,0,0.04), 0 8px 24px -16px rgba(0,0,0,0.12)",
+        "card-hover": "0 2px 4px rgba(0,0,0,0.05), 0 18px 40px -20px rgba(0,0,0,0.18)",
       },
       keyframes: {
         "fade-up": {
