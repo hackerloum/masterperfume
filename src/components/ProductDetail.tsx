@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Spinner from "./Spinner";
 import OrderForm from "./OrderForm";
-import Bottle3D from "./bottle/Bottle3D";
+import BottlePreview from "./bottle/BottlePreview";
 import { fetchActiveBottles, fetchProduct } from "@/lib/data";
 import { formatPrice } from "@/lib/config";
 import { type Bottle, type Product, type ProductSize } from "@/types";
@@ -96,11 +96,13 @@ export default function ProductDetail({ id }: { id: string }) {
       <div className="grid gap-8 lg:grid-cols-2">
         {/* 3D bottle preview */}
         <div className="lg:sticky lg:top-24 lg:self-start">
-          <Bottle3D
+          <BottlePreview
+            imageUrl={bottle?.imageUrl || undefined}
             baseStyle={bottle?.baseStyle ?? "decant"}
             modelUrl={bottle?.modelUrl || undefined}
             oilColor={product.oilColor}
             sizeMl={size?.sizeMl ?? availableSizes[0]?.sizeMl ?? 50}
+            name={bottle?.name}
           />
           <p className="mt-3 text-center text-sm text-ink/50">
             Previewing{" "}

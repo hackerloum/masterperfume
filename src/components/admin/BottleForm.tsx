@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import Spinner from "../Spinner";
-import Bottle3D from "../bottle/Bottle3D";
-import { uploadBottleModel } from "@/lib/bottles";
+import BottlePreview from "../bottle/BottlePreview";
+import { uploadBottleImage, uploadBottleModel } from "@/lib/bottles";
 import {
   BOTTLE_BASE_SHAPES,
   type Bottle,
@@ -24,11 +24,13 @@ export default function BottleForm({ initial, onSave, onCancel }: Props) {
   const [baseStyle, setBaseStyle] = useState<BottleStyleId>(
     initial?.baseStyle ?? "decant"
   );
+  const [imageUrl, setImageUrl] = useState(initial?.imageUrl ?? "");
   const [modelUrl, setModelUrl] = useState(initial?.modelUrl ?? "");
   const [sizesMl, setSizesMl] = useState<number[]>(initial?.sizesMl ?? []);
   const [isActive, setIsActive] = useState(initial?.isActive ?? true);
   const [newSize, setNewSize] = useState("");
 
+  const [uploadingImg, setUploadingImg] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -43,6 +45,22 @@ export default function BottleForm({ initial, onSave, onCancel }: Props) {
 
   function removeSize(ml: number) {
     setSizesMl((prev) => prev.filter((s) => s !== ml));
+  }
+
+  async function handleImage(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingImg(true);
+    setError("");
+    try {
+      const url = await uploadBottleImage(file);
+      setImageUrl(url);
+    } catch (err) {
+      console.error(err);
+      setError("Photo upload failed. Check Firebase Storage configuration.");
+    } finally {
+      setUploadingImg(false);
+    }
   }
 
   async function handleModel(e: React.ChangeEvent<HTMLInputElement>) {
@@ -74,6 +92,7 @@ export default function BottleForm({ initial, onSave, onCancel }: Props) {
         name: name.trim(),
         hint: hint.trim(),
         baseStyle,
+        imageUrl: imageUrl.trim(),
         modelUrl: modelUrl.trim(),
         sizesMl,
         isActive,
@@ -118,7 +137,44 @@ export default function BottleForm({ initial, onSave, onCancel }: Props) {
             />
           </div>
 
+          {/* Bottle photo (recommended) */}
           <div>
+            <label className="label">Bottle photo (recommended)</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImage}
+              className="block w-full text-sm text-ink/70 file:mr-3 file:rounded-full file:border-0 file:bg-accent file:px-4 file:py-2 file:text-sm file:text-white hover:file:bg-accent-dark"
+            />
+            {uploadingImg && (
+              <p className="mt-2 flex items-center gap-2 text-xs text-ink/50">
+                <Spinner className="h-4 w-4" /> Uploading photo…
+              </p>
+            )}
+            {imageUrl && (
+              <div className="mt-2 flex items-center gap-2 text-xs">
+                <span className="rounded bg-green-50 px-2 py-1 text-green-700">
+                  Photo attached
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setImageUrl("")}
+                  className="text-ink/50 hover:text-red-600"
+                >
+                  Remove
+                </button>
+              </div>
+            )}
+            <p className="mt-1 text-xs text-ink/50">
+              Upload a photo of the real bottle. When set, it&apos;s shown to
+              customers instead of the 3D model.
+            </p>
+          </div>
+
+          <div className="border-t border-ink/10 pt-4">
+            <p className="mb-3 text-xs font-medium uppercase tracking-wide text-ink/40">
+              Or use a 3D bottle (when no photo)
+            </p>
             <label className="label">Base 3D shape</label>
             <select
               className="input-field"
@@ -132,7 +188,7 @@ export default function BottleForm({ initial, onSave, onCancel }: Props) {
               ))}
             </select>
             <p className="mt-1 text-xs text-ink/50">
-              Used for the preview until a custom 3D model is uploaded.
+              Used only when no photo (and no custom model) is set.
             </p>
           </div>
 
@@ -236,11 +292,13 @@ export default function BottleForm({ initial, onSave, onCancel }: Props) {
         {/* Right: live preview */}
         <div>
           <label className="label">Preview</label>
-          <Bottle3D
+          <BottlePreview
+            imageUrl={imageUrl || undefined}
             baseStyle={baseStyle}
             modelUrl={modelUrl || undefined}
             oilColor="#c9a24b"
             sizeMl={sizesMl[0] ?? 50}
+            name={name}
           />
         </div>
       </div>

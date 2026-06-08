@@ -38,6 +38,9 @@ export interface Bottle {
   hint: string;
   /** Built-in 3D shape used when no custom model is uploaded. */
   baseStyle: BottleStyleId;
+  /** Optional uploaded photo of the real bottle (Firebase Storage). When set,
+   *  this is shown instead of the 3D preview. */
+  imageUrl: string;
   /** Optional uploaded GLB model URL (Firebase Storage). */
   modelUrl: string;
   /** Volumes (ml) this bottle is offered in. */
@@ -58,6 +61,7 @@ export const DEFAULT_BOTTLES: Bottle[] = [
     name: "Roll-on",
     hint: "Slim roller bottle",
     baseStyle: "rollon",
+    imageUrl: "",
     modelUrl: "",
     sizesMl: [3, 6, 12, 30],
     isActive: true,
@@ -68,6 +72,7 @@ export const DEFAULT_BOTTLES: Bottle[] = [
     name: "Spray Atomizer",
     hint: "Pump spray bottle",
     baseStyle: "spray",
+    imageUrl: "",
     modelUrl: "",
     sizesMl: [30, 50, 100],
     isActive: true,
@@ -78,6 +83,7 @@ export const DEFAULT_BOTTLES: Bottle[] = [
     name: "Classic Flask",
     hint: "Faceted glass flask",
     baseStyle: "flask",
+    imageUrl: "",
     modelUrl: "",
     sizesMl: [30, 50, 100],
     isActive: true,
@@ -88,6 +94,7 @@ export const DEFAULT_BOTTLES: Bottle[] = [
     name: "Simple Decant",
     hint: "Plain screw-cap vial",
     baseStyle: "decant",
+    imageUrl: "",
     modelUrl: "",
     sizesMl: [6, 12, 30, 50, 100],
     isActive: true,

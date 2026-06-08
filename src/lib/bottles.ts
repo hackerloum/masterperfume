@@ -27,6 +27,7 @@ function toBottle(snap: QueryDocumentSnapshot<DocumentData>): Bottle {
     name: data.name ?? "",
     hint: data.hint ?? "",
     baseStyle: (data.baseStyle as BottleStyleId) ?? "decant",
+    imageUrl: data.imageUrl ?? "",
     modelUrl: data.modelUrl ?? "",
     sizesMl: Array.isArray(data.sizesMl)
       ? data.sizesMl.map((n: unknown) => Number(n)).filter((n: number) => n > 0)
@@ -70,6 +71,18 @@ export async function deleteBottle(id: string): Promise<void> {
 export async function uploadBottleModel(file: File): Promise<string> {
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
   const path = `bottles/${Date.now()}-${safeName}`;
+  const storageRef = ref(storage, path);
+  await uploadBytes(storageRef, file);
+  return getDownloadURL(storageRef);
+}
+
+/**
+ * Upload a bottle photo to Firebase Storage and return its download URL.
+ * Stored under `bottles/images/<timestamp>-<filename>`.
+ */
+export async function uploadBottleImage(file: File): Promise<string> {
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+  const path = `bottles/images/${Date.now()}-${safeName}`;
   const storageRef = ref(storage, path);
   await uploadBytes(storageRef, file);
   return getDownloadURL(storageRef);

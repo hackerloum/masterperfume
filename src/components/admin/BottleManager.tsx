@@ -164,7 +164,11 @@ export default function BottleManager() {
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
                   <p className="font-medium text-ink">{b.name}</p>
-                  {b.modelUrl ? (
+                  {b.imageUrl ? (
+                    <span className="badge bg-green-50 text-green-700">
+                      Photo
+                    </span>
+                  ) : b.modelUrl ? (
                     <span className="badge bg-green-50 text-green-700">
                       3D model
                     </span>

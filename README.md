@@ -86,8 +86,11 @@ collection): each bottle has a name, the **mills (ml) it's offered in**, a base
 picks a bottle, and the size options shown are the perfume's priced sizes
 limited to that bottle's mills.
 
-- **`bottles`**: `name`, `hint`, `baseStyle`, `modelUrl` (GLB), `sizesMl[]`,
-  `isActive`, `createdAt`.
+- **`bottles`**: `name`, `hint`, `baseStyle`, `imageUrl` (photo), `modelUrl`
+  (GLB), `sizesMl[]`, `isActive`, `createdAt`.
+- **Bottle preview priority**: uploaded **photo** → custom **GLB** → built-in
+  procedural shape. So you can just upload a picture of your real bottle and
+  skip 3D entirely.
 - Built-in shapes (Roll-on, Spray Atomizer, Classic Flask, Simple Decant) are
   **procedurally generated** with three.js / react-three-fiber
   (`src/components/bottle/bottleProfiles.ts`) — no model files required.
