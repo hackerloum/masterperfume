@@ -16,6 +16,18 @@ service cloud.firestore {
       allow write: if true;
     }
 
+    match /bottles/{bottleId} {
+      allow read: if true;
+      // TODO: tighten to authenticated admins before production.
+      allow write: if true;
+    }
+
+    match /banners/{bannerId} {
+      allow read: if true;
+      // TODO: tighten to authenticated admins before production.
+      allow write: if true;
+    }
+
     match /orders/{orderId} {
       // Customers can create orders but not read others' orders.
       allow create: if true;

@@ -1,4 +1,4 @@
-import Hero from "@/components/Hero";
+import HeroBanner from "@/components/HeroBanner";
 import PromoTiles from "@/components/PromoTiles";
 import Benefits from "@/components/Benefits";
 import FeaturedProducts from "@/components/FeaturedProducts";
@@ -10,7 +10,7 @@ import StickyCTA from "@/components/StickyCTA";
 export default function HomePage() {
   return (
     <>
-      <Hero />
+      <HeroBanner />
       <PromoTiles />
       <FeaturedProducts />
       <ProductSpotlight />

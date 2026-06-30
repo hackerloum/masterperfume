@@ -61,6 +61,24 @@ export const DEFAULT_BOTTLES: Bottle[] = [
   },
 ];
 
+/**
+ * Promotional banner shown in the homepage hero carousel. Managed in the admin
+ * dashboard (`banners` collection).
+ */
+export interface Banner {
+  id: string;
+  title: string;
+  subtitle: string;
+  imageUrl: string;
+  /** Where the CTA links to, e.g. "/products" or "/products/<id>". */
+  link: string;
+  ctaLabel: string;
+  isActive: boolean;
+  createdAt: number;
+}
+
+export type BannerInput = Omit<Banner, "id" | "createdAt">;
+
 export const DEFAULT_OIL_COLOR = "#c9a24b"; // warm amber
 
 /** A single size option for a perfume, e.g. 50ml @ 25,000 TZS. */

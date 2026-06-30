@@ -6,20 +6,23 @@ import AdminGate from "./AdminGate";
 import ProductManager from "./ProductManager";
 import OrderManager from "./OrderManager";
 import BottleManager from "./BottleManager";
+import BannerManager from "./BannerManager";
 import { isFirebaseConfigured } from "@/lib/firebase";
 import {
   IconArrowRight,
   IconTag,
   IconTruck,
   IconDroplet,
+  IconImage,
 } from "../icons";
 
-type Tab = "orders" | "products" | "bottles";
+type Tab = "orders" | "products" | "bottles" | "banners";
 
 const NAV: { id: Tab; label: string; Icon: (p: { className?: string }) => JSX.Element }[] = [
   { id: "orders", label: "Orders", Icon: IconTruck },
   { id: "products", label: "Products", Icon: IconTag },
   { id: "bottles", label: "Bottles", Icon: IconDroplet },
+  { id: "banners", label: "Banners", Icon: IconImage },
 ];
 
 export default function AdminDashboard() {
@@ -99,6 +102,7 @@ export default function AdminDashboard() {
             {tab === "orders" && <OrderManager />}
             {tab === "products" && <ProductManager />}
             {tab === "bottles" && <BottleManager />}
+            {tab === "banners" && <BannerManager />}
           </main>
         </div>
       </div>

@@ -13,8 +13,14 @@ import {
   getProducts,
 } from "./products";
 import { getBottles } from "./bottles";
+import { getBanners } from "./banners";
 import { sampleProducts } from "./sampleProducts";
-import { DEFAULT_BOTTLES, type Bottle, type Product } from "@/types";
+import {
+  DEFAULT_BOTTLES,
+  type Banner,
+  type Bottle,
+  type Product,
+} from "@/types";
 
 export async function fetchProducts(): Promise<Product[]> {
   if (!isFirebaseConfigured) return sampleProducts;
@@ -39,6 +45,17 @@ export async function fetchFeaturedProducts(): Promise<Product[]> {
   } catch (err) {
     console.error("Falling back to sample featured products:", err);
     return sampleProducts.filter((p) => p.isFeatured);
+  }
+}
+
+/** Active banners for the homepage hero. Empty array means "use the default hero". */
+export async function fetchActiveBanners(): Promise<Banner[]> {
+  if (!isFirebaseConfigured) return [];
+  try {
+    return (await getBanners()).filter((b) => b.isActive && b.imageUrl);
+  } catch (err) {
+    console.error("Could not load banners:", err);
+    return [];
   }
 }
 

@@ -29,6 +29,8 @@ WhatsApp to confirm.
   - add / edit / delete products and upload images
   - manage sizes & prices, set the perfume oil colour, toggle "featured"
   - **manage bottles**: each bottle has its own photo and its own sizes (ml)
+  - **manage banners**: upload promo banners (image + title + link) shown in the
+    homepage hero carousel
   - view orders, change status (pending / contacted / completed)
   - see total orders and estimated sales
 - Mobile-first design, sticky bottom CTA, loading / empty / error states
