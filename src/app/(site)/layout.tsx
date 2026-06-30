@@ -1,7 +1,8 @@
+import AnnouncementBar from "@/components/AnnouncementBar";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
-/** Layout for the public storefront (adds the navbar + footer). */
+/** Layout for the public storefront (adds the announcement bar, navbar + footer). */
 export default function SiteLayout({
   children,
 }: {
@@ -9,6 +10,7 @@ export default function SiteLayout({
 }) {
   return (
     <div className="flex min-h-screen flex-col">
+      <AnnouncementBar />
       <Navbar />
       <main className="flex-1">{children}</main>
       <Footer />
