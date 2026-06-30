@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import Spinner from "./Spinner";
-import { createOrder } from "@/lib/orders";
+import { createOrder, generateOrderCode } from "@/lib/orders";
+import { saveOrder } from "@/lib/myOrders";
 import { isFirebaseConfigured } from "@/lib/firebase";
 import { buildWhatsAppLink, formatPrice, siteConfig } from "@/lib/config";
 import { IconCheck, IconWhatsApp } from "./icons";
@@ -42,13 +43,15 @@ export default function OrderForm({
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [whatsAppLink, setWhatsAppLink] = useState("");
+  const [orderCode, setOrderCode] = useState("");
 
   const total = size ? size.price * quantity : 0;
 
   /** Compose the WhatsApp message for an order. */
-  function composeMessage(): string {
+  function composeMessage(code: string): string {
     return (
       `Hello ${siteConfig.name}! I'd like to place an order:\n\n` +
+      `*Order code:* ${code}\n` +
       `*Perfume:* ${product.name}\n` +
       `*Bottle:* ${bottle?.name ?? "—"}\n` +
       `*Size:* ${size?.sizeMl}ml\n` +
@@ -71,7 +74,9 @@ export default function OrderForm({
     setStatus("submitting");
     setErrorMsg("");
 
+    const code = generateOrderCode();
     const order = {
+      code,
       productId: product.id,
       productName: product.name,
       selectedSize: size.sizeMl,
@@ -90,7 +95,10 @@ export default function OrderForm({
       if (isFirebaseConfigured) {
         await createOrder(order);
       }
-      setWhatsAppLink(buildWhatsAppLink(composeMessage()));
+      // Remember on this device so the customer can track it later.
+      saveOrder({ code, productName: product.name, createdAt: Date.now() });
+      setOrderCode(code);
+      setWhatsAppLink(buildWhatsAppLink(composeMessage(code)));
       setStatus("success");
     } catch (err) {
       console.error(err);
@@ -113,16 +121,35 @@ export default function OrderForm({
           Thank you for your order. We will contact you shortly on WhatsApp.
         </p>
 
+        {/* Tracking code */}
+        <div className="mt-5 rounded-xl border border-dashed border-accent/40 bg-accent/5 px-4 py-3">
+          <p className="text-xs uppercase tracking-wide text-ink/50">
+            Your order code
+          </p>
+          <p className="mt-0.5 font-serif text-2xl font-700 tracking-wider text-accent-dark">
+            {orderCode}
+          </p>
+          <p className="mt-1 text-xs text-ink/50">
+            Save this code to track your order status anytime.
+          </p>
+        </div>
+
         <a
           href={whatsAppLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="btn-accent mt-6 w-full"
+          className="btn-accent mt-5 w-full"
         >
           <IconWhatsApp className="h-5 w-5" />
           Confirm on WhatsApp
         </a>
-        <Link href="/products" className="btn-outline mt-3 w-full">
+        <Link href={`/track?code=${orderCode}`} className="btn-outline mt-3 w-full">
+          Track my order
+        </Link>
+        <Link
+          href="/products"
+          className="mt-3 inline-block text-sm text-ink/50 hover:text-accent"
+        >
           Continue shopping
         </Link>
       </div>

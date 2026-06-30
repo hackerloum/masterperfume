@@ -23,8 +23,11 @@ WhatsApp to confirm.
 - **Product detail** — bottle photo preview with switchable backdrops, size +
   bottle selection, and a no-login order form. Built for "perfume za kupima":
   the oil is mixed and poured fresh into the selected bottle.
-- **Checkout** — saves to Firestore, shows a success message, and offers a
-  WhatsApp confirmation button with a pre-filled message
+- **Checkout** — saves to Firestore, shows a success message + a unique **order
+  code**, and offers a WhatsApp confirmation button with a pre-filled message
+- **Track order** (`/track`) — customers check their order status
+  (pending / contacted / completed) with their order code — no account needed;
+  recent orders on the device are remembered via localStorage
 - **Admin** (`/admin`) — password-gated dashboard to:
   - add / edit / delete products and upload images
   - manage sizes & prices, set the perfume oil colour, toggle "featured"

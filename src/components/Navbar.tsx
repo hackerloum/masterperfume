@@ -8,6 +8,7 @@ import { IconWhatsApp } from "./icons";
 const links = [
   { href: "/", label: "Home" },
   { href: "/products", label: "Shop" },
+  { href: "/track", label: "Track Order" },
 ];
 
 export default function Navbar() {

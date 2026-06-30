@@ -108,9 +108,14 @@ export default function OrderManager() {
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                  <p className="font-serif text-lg font-600 text-ink">
-                    {o.productName}
-                  </p>
+                  <div className="flex items-center gap-2">
+                    <p className="font-serif text-lg font-600 text-ink">
+                      {o.productName}
+                    </p>
+                    {o.code && (
+                      <span className="badge bg-cream font-mono">{o.code}</span>
+                    )}
+                  </div>
                   <p className="text-sm text-ink/60">
                     {o.bottleStyle ? `${o.bottleStyle} · ` : ""}
                     {o.selectedSize}ml × {o.quantity} ·{" "}

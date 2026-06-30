@@ -5,9 +5,11 @@ import {
   addDoc,
   collection,
   getDocs,
+  limit,
   orderBy,
   query,
   updateDoc,
+  where,
   doc,
   type DocumentData,
   type QueryDocumentSnapshot,
@@ -17,10 +19,21 @@ import type { Order, OrderInput, OrderStatus } from "@/types";
 
 const COLLECTION = "orders";
 
+/** Generate a short, human-friendly tracking code (no ambiguous characters). */
+export function generateOrderCode(): string {
+  const chars = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+  let s = "";
+  for (let i = 0; i < 6; i++) {
+    s += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return `MP-${s}`;
+}
+
 function toOrder(snap: QueryDocumentSnapshot<DocumentData>): Order {
   const data = snap.data();
   return {
     id: snap.id,
+    code: data.code ?? "",
     productId: data.productId ?? "",
     productName: data.productName ?? "",
     selectedSize: Number(data.selectedSize ?? 0),
@@ -63,4 +76,21 @@ export async function updateOrderStatus(
   status: OrderStatus
 ): Promise<void> {
   await updateDoc(doc(db, COLLECTION, id), { status });
+}
+
+/**
+ * Look up an order by its tracking code (used by the customer-facing "Track
+ * order" page — no account needed). Returns null if not found.
+ */
+export async function getOrderByCode(code: string): Promise<Order | null> {
+  const normalized = code.trim().toUpperCase();
+  if (!normalized) return null;
+  const q = query(
+    collection(db, COLLECTION),
+    where("code", "==", normalized),
+    limit(1)
+  );
+  const snap = await getDocs(q);
+  if (snap.empty) return null;
+  return toOrder(snap.docs[0]);
 }

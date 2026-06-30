@@ -114,6 +114,8 @@ export const ORDER_STATUSES: OrderStatus[] = [
 
 export interface Order {
   id: string;
+  /** Short human-friendly tracking code, e.g. "MP-7F3K9". */
+  code: string;
   productId: string;
   productName: string;
   selectedSize: number; // sizeMl

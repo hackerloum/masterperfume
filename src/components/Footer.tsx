@@ -34,6 +34,11 @@ export default function Footer() {
                 All perfumes
               </Link>
             </li>
+            <li>
+              <Link href="/track" className="transition hover:text-accent">
+                Track order
+              </Link>
+            </li>
           </ul>
         </div>
 
