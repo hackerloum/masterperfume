@@ -31,6 +31,7 @@ export default function TrackOrder() {
   );
   const [error, setError] = useState("");
   const [recent, setRecent] = useState<SavedOrder[]>([]);
+  const [trackedCode, setTrackedCode] = useState("");
 
   // Load saved orders + prefill / auto-track from the ?code= query param.
   useEffect(() => {
@@ -43,30 +44,43 @@ export default function TrackOrder() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function lookup(raw: string) {
+  async function lookup(raw: string, silent = false) {
     const value = raw.trim();
     if (!value) return;
     if (!isFirebaseConfigured) {
-      setError("Order tracking isn't available in this preview.");
+      if (!silent) setError("Order tracking isn't available in this preview.");
       return;
     }
-    setStatus("loading");
-    setError("");
-    setOrders([]);
+    if (!silent) {
+      setStatus("loading");
+      setError("");
+      setOrders([]);
+    }
     try {
       const found = await getOrdersByCode(value);
       if (found.length) {
         setOrders(found);
         setStatus("found");
-      } else {
+        setTrackedCode(value);
+      } else if (!silent) {
         setStatus("notfound");
       }
     } catch (err) {
       console.error(err);
-      setError("Something went wrong. Please try again.");
-      setStatus("idle");
+      if (!silent) {
+        setError("Something went wrong. Please try again.");
+        setStatus("idle");
+      }
     }
   }
+
+  // Auto-refresh the status every 4s once an order is being tracked.
+  useEffect(() => {
+    if (status !== "found" || !trackedCode) return;
+    const t = setInterval(() => lookup(trackedCode, true), 4000);
+    return () => clearInterval(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status, trackedCode]);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -131,11 +145,17 @@ export default function TrackOrder() {
                 {orders.length} item{orders.length === 1 ? "" : "s"}
               </h2>
             </div>
-            <span
-              className={`rounded-full px-3 py-1 text-xs font-medium capitalize ${statusStyles[head.status]}`}
-            >
-              {head.status}
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1 text-[0.7rem] text-ink/40">
+                <span className="h-1.5 w-1.5 animate-pulse-soft rounded-full bg-green-500" />
+                Live
+              </span>
+              <span
+                className={`rounded-full px-3 py-1 text-xs font-medium capitalize ${statusStyles[head.status]}`}
+              >
+                {head.status}
+              </span>
+            </div>
           </div>
 
           {/* Progress steps */}

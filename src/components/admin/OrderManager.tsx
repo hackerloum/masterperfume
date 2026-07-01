@@ -13,26 +13,40 @@ const statusStyles: Record<OrderStatus, string> = {
   completed: "bg-green-100 text-green-800",
 };
 
+/** Cheap signature comparison so silent polls only re-render on real changes. */
+function sameOrders(a: Order[] | null, b: Order[]): boolean {
+  if (!a || a.length !== b.length) return false;
+  const sig = (o: Order) => `${o.id}:${o.status}`;
+  return a.map(sig).join("|") === b.map(sig).join("|");
+}
+
 export default function OrderManager() {
   const [orders, setOrders] = useState<Order[] | null>(null);
   const [error, setError] = useState("");
   const [updating, setUpdating] = useState<string | null>(null);
 
-  async function load() {
+  async function load(silent = false) {
     if (!isFirebaseConfigured) {
       setOrders([]);
       return;
     }
     try {
-      setOrders(await getOrders());
+      const fresh = await getOrders();
+      // Only update state when something actually changed, so silent polls
+      // don't re-render (and disturb) the list unnecessarily.
+      setOrders((prev) => (sameOrders(prev, fresh) ? prev : fresh));
+      if (silent) setError("");
     } catch (err) {
       console.error(err);
-      setError("Could not load orders.");
+      if (!silent) setError("Could not load orders.");
     }
   }
 
   useEffect(() => {
     load();
+    // Auto-refresh every 4s so new orders / status changes appear live.
+    const t = setInterval(() => load(true), 4000);
+    return () => clearInterval(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -80,6 +94,13 @@ export default function OrderManager() {
 
   return (
     <div>
+      <div className="mb-3 flex items-center justify-end">
+        <span className="inline-flex items-center gap-1.5 text-xs text-ink/40">
+          <span className="h-1.5 w-1.5 animate-pulse-soft rounded-full bg-green-500" />
+          Live · auto-refreshing
+        </span>
+      </div>
+
       {/* Stats */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         <StatCard label="Total Orders" value={String(stats.totalOrders)} />
