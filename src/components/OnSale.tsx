@@ -3,9 +3,22 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import ProductCard from "./ProductCard";
+import Countdown from "./Countdown";
 import { fetchProducts } from "@/lib/data";
 import { IconArrowRight } from "./icons";
 import type { Product } from "@/types";
+
+/** Sale ends at the end of today (local) unless NEXT_PUBLIC_SALE_ENDS is set. */
+function saleEndsAt(): number {
+  const configured = process.env.NEXT_PUBLIC_SALE_ENDS;
+  if (configured) {
+    const t = Date.parse(configured);
+    if (!Number.isNaN(t)) return t;
+  }
+  const d = new Date();
+  d.setHours(23, 59, 59, 999);
+  return d.getTime();
+}
 
 /** "Hot Deals" — products currently on sale (discountPercent > 0). */
 export default function OnSale() {
@@ -36,9 +49,13 @@ export default function OnSale() {
             <h2 className="mt-1 font-serif text-3xl font-800 text-ink sm:text-4xl">
               Hot Deals
             </h2>
+            <div className="mt-2 flex items-center gap-2 text-sm text-ink/60">
+              <span>Ends in</span>
+              <Countdown target={saleEndsAt()} />
+            </div>
           </div>
           <Link
-            href="/products?q="
+            href="/products?sort=discount"
             className="hidden items-center gap-1 text-sm font-medium text-red-600 hover:underline sm:inline-flex"
           >
             See all <IconArrowRight className="h-4 w-4" />

@@ -12,6 +12,7 @@ import RelatedProducts from "./RelatedProducts";
 import FrequentlyBought from "./FrequentlyBought";
 import RecentlyViewed from "./RecentlyViewed";
 import ProductStickyBar from "./ProductStickyBar";
+import ProductUrgency from "./ProductUrgency";
 import Stars from "./Stars";
 import { fetchActiveBottles, fetchProduct } from "@/lib/data";
 import { addRecentlyViewed } from "@/lib/recentlyViewed";
@@ -185,6 +186,8 @@ export default function ProductDetail({ id }: { id: string }) {
               )}
             </p>
           )}
+          <ProductUrgency product={product} />
+
           <p className="mt-4 whitespace-pre-line leading-relaxed text-ink/70">
             {product.description}
           </p>

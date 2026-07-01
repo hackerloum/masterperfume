@@ -39,6 +39,11 @@ export default function Footer() {
                 Track order
               </Link>
             </li>
+            <li>
+              <Link href="/faq" className="transition hover:text-accent">
+                FAQ &amp; delivery
+              </Link>
+            </li>
           </ul>
         </div>
 

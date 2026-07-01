@@ -4,6 +4,7 @@ import Benefits from "@/components/Benefits";
 import OnSale from "@/components/OnSale";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import ProductSpotlight from "@/components/ProductSpotlight";
+import HomeRows from "@/components/HomeRows";
 import CategoryShowcase from "@/components/CategoryShowcase";
 import RecentlyViewed from "@/components/RecentlyViewed";
 import CtaBand from "@/components/CtaBand";
@@ -17,6 +18,7 @@ export default function HomePage() {
       <OnSale />
       <FeaturedProducts />
       <ProductSpotlight />
+      <HomeRows />
       <CategoryShowcase />
       <div className="container-px">
         <RecentlyViewed />

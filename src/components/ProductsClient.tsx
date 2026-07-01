@@ -35,7 +35,8 @@ export default function ProductsClient() {
   const [error, setError] = useState(false);
   const [filter, setFilter] = useState<Filter>(initialCategory ?? "All");
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
-  const [sort, setSort] = useState<Sort>("featured");
+  const initialSort = SORTS.find((s) => s.id === searchParams.get("sort"));
+  const [sort, setSort] = useState<Sort>(initialSort?.id ?? "featured");
 
   useEffect(() => {
     fetchProducts()

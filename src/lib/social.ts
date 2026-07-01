@@ -12,3 +12,10 @@ export function ratingFor(id: string): { rating: number; count: number } {
   const count = 18 + (h % 382); // 18 – ~399
   return { rating: Math.round(rating * 10) / 10, count };
 }
+
+/** Simulated "units sold" (stable per product) for best-seller sorting + urgency. */
+export function soldFor(id: string): number {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 131 + id.charCodeAt(i)) >>> 0;
+  return 40 + (h % 960); // 40 – ~999
+}
