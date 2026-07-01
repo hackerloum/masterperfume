@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { fetchProducts } from "@/lib/data";
-import { buildWhatsAppLink, formatPrice, siteConfig } from "@/lib/config";
+import { buildWhatsAppLink, formatPrice, salePrice, siteConfig } from "@/lib/config";
 import { IconWhatsApp } from "./icons";
 import BottleSilhouette from "./bottle/BottleSilhouette";
 import type { Product } from "@/types";
@@ -35,7 +35,9 @@ export default function FrequentlyBought({ product }: { product: Product }) {
   const b = partner ? cheapest(partner) : null;
   if (!partner || !a || !b) return null;
 
-  const full = a.price + b.price;
+  const aPrice = salePrice(a.price, product.discountPercent);
+  const bPrice = salePrice(b.price, partner.discountPercent);
+  const full = aPrice + bPrice;
   const bundle = roundTo(full * (1 - BUNDLE_DISCOUNT));
   const save = full - bundle;
 
@@ -43,8 +45,8 @@ export default function FrequentlyBought({ product }: { product: Product }) {
     `Hello ${siteConfig.name}! I'd like this bundle (${Math.round(
       BUNDLE_DISCOUNT * 100
     )}% off):\n\n` +
-    `1) ${product.name} — ${a.sizeMl}ml — ${formatPrice(a.price)}\n` +
-    `2) ${partner.name} — ${b.sizeMl}ml — ${formatPrice(b.price)}\n\n` +
+    `1) ${product.name} — ${a.sizeMl}ml — ${formatPrice(aPrice)}\n` +
+    `2) ${partner.name} — ${b.sizeMl}ml — ${formatPrice(bPrice)}\n\n` +
     `*Bundle total:* ${formatPrice(bundle)} (save ${formatPrice(save)})`;
 
   const Thumb = ({ p }: { p: Product }) => (

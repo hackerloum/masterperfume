@@ -22,6 +22,7 @@ export const sampleProducts: Product[] = [
     imageUrl:
       "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=800&q=80",
     oilColor: "#7a3b1d",
+    discountPercent: 20,
     sizes: [
       { sizeMl: 30, price: 25000 },
       { sizeMl: 50, price: 40000 },
@@ -39,6 +40,7 @@ export const sampleProducts: Product[] = [
     imageUrl:
       "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=800&q=80",
     oilColor: "#e6739f",
+    discountPercent: 0,
     sizes: [
       { sizeMl: 30, price: 22000 },
       { sizeMl: 50, price: 35000 },
@@ -55,6 +57,7 @@ export const sampleProducts: Product[] = [
     imageUrl:
       "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=800&q=80",
     oilColor: "#3a2f2a",
+    discountPercent: 0,
     sizes: [
       { sizeMl: 50, price: 38000 },
       { sizeMl: 100, price: 65000 },
@@ -71,6 +74,7 @@ export const sampleProducts: Product[] = [
     imageUrl:
       "https://images.unsplash.com/photo-1615634260167-c8cdede054de?auto=format&fit=crop&w=800&q=80",
     oilColor: "#e3c34a",
+    discountPercent: 15,
     sizes: [
       { sizeMl: 30, price: 18000 },
       { sizeMl: 50, price: 30000 },
@@ -87,6 +91,7 @@ export const sampleProducts: Product[] = [
     imageUrl:
       "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&w=800&q=80",
     oilColor: "#c9882b",
+    discountPercent: 0,
     sizes: [
       { sizeMl: 50, price: 33000 },
       { sizeMl: 100, price: 58000 },
@@ -103,6 +108,7 @@ export const sampleProducts: Product[] = [
     imageUrl:
       "https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=800&q=80",
     oilColor: "#3a7bd5",
+    discountPercent: 0,
     sizes: [
       { sizeMl: 50, price: 36000 },
       { sizeMl: 100, price: 62000 },

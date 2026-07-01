@@ -1,6 +1,7 @@
 import HeroBanner from "@/components/HeroBanner";
 import PromoTiles from "@/components/PromoTiles";
 import Benefits from "@/components/Benefits";
+import OnSale from "@/components/OnSale";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import ProductSpotlight from "@/components/ProductSpotlight";
 import CategoryShowcase from "@/components/CategoryShowcase";
@@ -13,6 +14,7 @@ export default function HomePage() {
     <>
       <HeroBanner />
       <PromoTiles />
+      <OnSale />
       <FeaturedProducts />
       <ProductSpotlight />
       <CategoryShowcase />

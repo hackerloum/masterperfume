@@ -28,6 +28,9 @@ export default function ProductForm({ initial, onSave, onCancel }: Props) {
     initial?.category ?? "Unisex"
   );
   const [description, setDescription] = useState(initial?.description ?? "");
+  const [discountPercent, setDiscountPercent] = useState(
+    initial?.discountPercent ?? 0
+  );
   const [imageUrl, setImageUrl] = useState(initial?.imageUrl ?? "");
   const [oilColor, setOilColor] = useState(
     initial?.oilColor ?? DEFAULT_OIL_COLOR
@@ -92,6 +95,7 @@ export default function ProductForm({ initial, onSave, onCancel }: Props) {
         imageUrl: imageUrl.trim(),
         oilColor,
         sizes: cleanedSizes,
+        discountPercent: Math.max(0, Math.min(90, Number(discountPercent) || 0)),
         isFeatured,
       });
     } catch (err) {
@@ -147,6 +151,22 @@ export default function ProductForm({ initial, onSave, onCancel }: Props) {
             />
             Show on home page (featured)
           </label>
+        </div>
+
+        <div>
+          <label className="label">Discount %</label>
+          <input
+            type="number"
+            min={0}
+            max={90}
+            className="input-field"
+            value={discountPercent}
+            onChange={(e) => setDiscountPercent(Number(e.target.value))}
+            placeholder="0"
+          />
+          <p className="mt-1 text-xs text-ink/50">
+            0 = no sale. Shows a “-X%” badge and a crossed-out old price.
+          </p>
         </div>
 
         {/* Oil colour — tints the 3D / 2D bottle preview */}

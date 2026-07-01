@@ -37,6 +37,7 @@ function toProduct(snap: QueryDocumentSnapshot<DocumentData>): Product {
     imageUrl: data.imageUrl ?? "",
     oilColor: data.oilColor ?? DEFAULT_OIL_COLOR,
     sizes: Array.isArray(data.sizes) ? data.sizes : [],
+    discountPercent: Number(data.discountPercent ?? 0),
     isFeatured: Boolean(data.isFeatured),
     createdAt:
       typeof data.createdAt === "number" ? data.createdAt : Date.now(),

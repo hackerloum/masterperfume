@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/types";
-import { formatPrice } from "@/lib/config";
+import { formatPrice, salePrice } from "@/lib/config";
 import BottleSilhouette from "./bottle/BottleSilhouette";
 import Stars from "./Stars";
 
@@ -38,6 +38,11 @@ export default function ProductCard({ product }: { product: Product }) {
         <span className="absolute left-3 top-3 badge bg-white/90 backdrop-blur">
           {product.category}
         </span>
+        {product.discountPercent > 0 && (
+          <span className="absolute right-3 top-3 rounded-full bg-red-500 px-2 py-1 text-[0.65rem] font-bold text-white shadow">
+            -{product.discountPercent}%
+          </span>
+        )}
       </div>
 
       <div className="flex items-start justify-between gap-3 pt-3">
@@ -49,9 +54,24 @@ export default function ProductCard({ product }: { product: Product }) {
             {product.sizes.map((s) => `${s.sizeMl}ml`).join(" · ")}
           </p>
         </div>
-        <p className="shrink-0 text-sm font-medium text-ink">
-          {from !== null ? formatPrice(from) : "—"}
-        </p>
+        <div className="shrink-0 text-right">
+          {from !== null ? (
+            product.discountPercent > 0 ? (
+              <>
+                <p className="text-sm font-semibold text-red-600">
+                  {formatPrice(salePrice(from, product.discountPercent))}
+                </p>
+                <p className="text-[0.7rem] text-ink/40 line-through">
+                  {formatPrice(from)}
+                </p>
+              </>
+            ) : (
+              <p className="text-sm font-medium text-ink">{formatPrice(from)}</p>
+            )
+          ) : (
+            <p className="text-sm font-medium text-ink">—</p>
+          )}
+        </div>
       </div>
 
       <Stars productId={product.id} className="mt-1.5" />

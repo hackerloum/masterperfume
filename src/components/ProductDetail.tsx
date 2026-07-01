@@ -15,7 +15,7 @@ import ProductStickyBar from "./ProductStickyBar";
 import Stars from "./Stars";
 import { fetchActiveBottles, fetchProduct } from "@/lib/data";
 import { addRecentlyViewed } from "@/lib/recentlyViewed";
-import { formatPrice } from "@/lib/config";
+import { formatPrice, salePrice } from "@/lib/config";
 import { type Bottle, type Product, type ProductSize } from "@/types";
 
 export default function ProductDetail({ id }: { id: string }) {
@@ -167,8 +167,22 @@ export default function ProductDetail({ id }: { id: string }) {
           </h1>
           <Stars productId={product.id} className="mt-2" />
           {from !== null && (
-            <p className="mt-2 text-lg text-accent-dark">
-              From {formatPrice(from)}
+            <p className="mt-2 flex items-baseline gap-2 text-lg">
+              {product.discountPercent > 0 ? (
+                <>
+                  <span className="font-semibold text-red-600">
+                    From {formatPrice(salePrice(from, product.discountPercent))}
+                  </span>
+                  <span className="text-sm text-ink/40 line-through">
+                    {formatPrice(from)}
+                  </span>
+                  <span className="rounded-full bg-red-500 px-2 py-0.5 text-xs font-bold text-white">
+                    -{product.discountPercent}%
+                  </span>
+                </>
+              ) : (
+                <span className="text-accent-dark">From {formatPrice(from)}</span>
+              )}
             </p>
           )}
           <p className="mt-4 whitespace-pre-line leading-relaxed text-ink/70">
@@ -205,7 +219,7 @@ export default function ProductDetail({ id }: { id: string }) {
       {/* Sticky mobile buy-bar */}
       <ProductStickyBar
         name={product.name}
-        price={size?.price ?? from}
+        price={salePrice(size?.price ?? from ?? 0, product.discountPercent) || null}
       />
     </article>
   );

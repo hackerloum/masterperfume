@@ -6,7 +6,7 @@ import Spinner from "./Spinner";
 import { createOrder, generateOrderCode } from "@/lib/orders";
 import { saveOrder } from "@/lib/myOrders";
 import { isFirebaseConfigured } from "@/lib/firebase";
-import { buildWhatsAppLink, formatPrice, siteConfig } from "@/lib/config";
+import { buildWhatsAppLink, formatPrice, salePrice, siteConfig } from "@/lib/config";
 import { IconCheck, IconWhatsApp } from "./icons";
 import { type Bottle, type Product, type ProductSize } from "@/types";
 
@@ -45,7 +45,8 @@ export default function OrderForm({
   const [whatsAppLink, setWhatsAppLink] = useState("");
   const [orderCode, setOrderCode] = useState("");
 
-  const total = size ? size.price * quantity : 0;
+  const unitPrice = size ? salePrice(size.price, product.discountPercent) : 0;
+  const total = unitPrice * quantity;
 
   /** Compose the WhatsApp message for an order. */
   function composeMessage(code: string): string {
@@ -81,7 +82,7 @@ export default function OrderForm({
       productName: product.name,
       selectedSize: size.sizeMl,
       bottleStyle: bottle?.name ?? "",
-      price: size.price,
+      price: unitPrice,
       quantity,
       customerName: customerName.trim(),
       phone: phone.trim(),

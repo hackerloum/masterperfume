@@ -20,6 +20,16 @@ export function formatPrice(amount: number): string {
   return `${siteConfig.currency} ${amount.toLocaleString("en-US")}`;
 }
 
+/**
+ * Apply a discount percent to a price, rounded to the nearest 500 for clean
+ * numbers. Returns the original price when there's no discount.
+ */
+export function salePrice(price: number, discountPercent?: number): number {
+  if (!discountPercent || discountPercent <= 0) return price;
+  const pct = Math.min(90, discountPercent);
+  return Math.round((price * (1 - pct / 100)) / 500) * 500;
+}
+
 /** Build a wa.me link with a pre-filled, URL-encoded message. */
 export function buildWhatsAppLink(message: string): string {
   return `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(message)}`;

@@ -96,6 +96,8 @@ export interface Product {
   /** Hex color of the mixed perfume oil — used to tint the 3D/2D bottle. */
   oilColor: string;
   sizes: ProductSize[];
+  /** Discount percent (0–90). 0 = no sale. Applied to every size's price. */
+  discountPercent: number;
   isFeatured: boolean;
   /** Stored as epoch milliseconds for easy serialization. */
   createdAt: number;
