@@ -6,6 +6,9 @@ import Spinner from "./Spinner";
 import OrderForm from "./OrderForm";
 import BottlePreview from "./bottle/BottlePreview";
 import { BACKDROPS } from "./bottle/bottleBackdrops";
+import PromoMarquee from "./PromoMarquee";
+import TrustRow from "./TrustRow";
+import RelatedProducts from "./RelatedProducts";
 import { fetchActiveBottles, fetchProduct } from "@/lib/data";
 import { formatPrice } from "@/lib/config";
 import { type Bottle, type Product, type ProductSize } from "@/types";
@@ -97,6 +100,11 @@ export default function ProductDetail({ id }: { id: string }) {
         <span className="text-ink/80">{product.name}</span>
       </nav>
 
+      {/* Animated persuasion bar */}
+      <div className="mb-6">
+        <PromoMarquee />
+      </div>
+
       <div className="grid gap-8 lg:grid-cols-2">
         {/* 3D bottle preview */}
         <div className="lg:sticky lg:top-24 lg:self-start">
@@ -139,7 +147,15 @@ export default function ProductDetail({ id }: { id: string }) {
 
         {/* Info + order */}
         <div>
-          <span className="badge bg-cream">{product.category}</span>
+          <div className="flex items-center gap-2">
+            <span className="badge bg-cream">{product.category}</span>
+            {product.isFeatured && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-accent/10 px-2.5 py-1 text-xs font-semibold text-accent-dark">
+                <span className="h-1.5 w-1.5 animate-pulse-soft rounded-full bg-accent" />
+                Popular pick
+              </span>
+            )}
+          </div>
           <h1 className="mt-3 font-serif text-3xl font-700 text-ink sm:text-4xl">
             {product.name}
           </h1>
@@ -152,7 +168,11 @@ export default function ProductDetail({ id }: { id: string }) {
             {product.description}
           </p>
 
-          <div className="mt-8">
+          <div className="mt-6">
+            <TrustRow />
+          </div>
+
+          <div className="mt-6">
             <OrderForm
               product={product}
               bottles={bottles}
@@ -165,6 +185,9 @@ export default function ProductDetail({ id }: { id: string }) {
           </div>
         </div>
       </div>
+
+      {/* Cross-sell */}
+      <RelatedProducts currentId={product.id} category={product.category} />
     </article>
   );
 }
