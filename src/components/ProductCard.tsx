@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { Product } from "@/types";
 import { formatPrice } from "@/lib/config";
 import BottleSilhouette from "./bottle/BottleSilhouette";
+import Stars from "./Stars";
 
 /** Returns the lowest price across a product's sizes ("starting price"). */
 function startingPrice(product: Product): number | null {
@@ -52,6 +53,8 @@ export default function ProductCard({ product }: { product: Product }) {
           {from !== null ? formatPrice(from) : "—"}
         </p>
       </div>
+
+      <Stars productId={product.id} className="mt-1.5" />
     </Link>
   );
 }

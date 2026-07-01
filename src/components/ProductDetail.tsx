@@ -9,7 +9,12 @@ import { BACKDROPS } from "./bottle/bottleBackdrops";
 import PromoMarquee from "./PromoMarquee";
 import TrustRow from "./TrustRow";
 import RelatedProducts from "./RelatedProducts";
+import FrequentlyBought from "./FrequentlyBought";
+import RecentlyViewed from "./RecentlyViewed";
+import ProductStickyBar from "./ProductStickyBar";
+import Stars from "./Stars";
 import { fetchActiveBottles, fetchProduct } from "@/lib/data";
+import { addRecentlyViewed } from "@/lib/recentlyViewed";
 import { formatPrice } from "@/lib/config";
 import { type Bottle, type Product, type ProductSize } from "@/types";
 
@@ -29,6 +34,7 @@ export default function ProductDetail({ id }: { id: string }) {
         setProduct(p);
         setBottles(bs);
         if (bs.length) setBottle(bs[0]);
+        if (p) addRecentlyViewed(p.id);
       })
       .catch(() => setError(true));
   }, [id]);
@@ -159,6 +165,7 @@ export default function ProductDetail({ id }: { id: string }) {
           <h1 className="mt-3 font-serif text-3xl font-700 text-ink sm:text-4xl">
             {product.name}
           </h1>
+          <Stars productId={product.id} className="mt-2" />
           {from !== null && (
             <p className="mt-2 text-lg text-accent-dark">
               From {formatPrice(from)}
@@ -172,7 +179,7 @@ export default function ProductDetail({ id }: { id: string }) {
             <TrustRow />
           </div>
 
-          <div className="mt-6">
+          <div id="order-form" className="mt-6 scroll-mt-24">
             <OrderForm
               product={product}
               bottles={bottles}
@@ -186,8 +193,20 @@ export default function ProductDetail({ id }: { id: string }) {
         </div>
       </div>
 
+      {/* Frequently bought together */}
+      <FrequentlyBought product={product} />
+
       {/* Cross-sell */}
       <RelatedProducts currentId={product.id} category={product.category} />
+
+      {/* Recently viewed */}
+      <RecentlyViewed excludeId={product.id} />
+
+      {/* Sticky mobile buy-bar */}
+      <ProductStickyBar
+        name={product.name}
+        price={size?.price ?? from}
+      />
     </article>
   );
 }
