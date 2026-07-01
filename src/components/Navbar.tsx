@@ -4,7 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { buildWhatsAppLink } from "@/lib/config";
-import { IconWhatsApp } from "./icons";
+import { useCart } from "@/lib/cart";
+import { useWishlist } from "@/lib/wishlist";
+import { IconWhatsApp, IconCart, IconHeart } from "./icons";
 
 const links = [
   { href: "/", label: "Home" },
@@ -16,6 +18,8 @@ export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const [search, setSearch] = useState("");
+  const { count: cartCount } = useCart();
+  const { count: wishCount } = useWishlist();
 
   function submitSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -84,16 +88,31 @@ export default function Navbar() {
               </svg>
             </button>
           </form>
-          <a
-            href={buildWhatsAppLink("Hello Master Perfume! I'd like to order.")}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden items-center gap-2 text-sm text-ink/60 transition hover:text-accent sm:inline-flex"
+          <Link
+            href="/wishlist"
+            aria-label="Wishlist"
+            className="relative p-1.5 text-ink/70 transition hover:text-accent"
           >
-            <IconWhatsApp className="h-4 w-4" />
-            Order
-          </a>
-          <Link href="/products" className="btn-accent px-5 py-2.5 text-sm">
+            <IconHeart className="h-5 w-5" />
+            {wishCount > 0 && (
+              <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[0.6rem] font-bold text-white">
+                {wishCount}
+              </span>
+            )}
+          </Link>
+          <Link
+            href="/cart"
+            aria-label="Cart"
+            className="relative p-1.5 text-ink/70 transition hover:text-accent"
+          >
+            <IconCart className="h-5 w-5" />
+            {cartCount > 0 && (
+              <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[0.6rem] font-bold text-white">
+                {cartCount}
+              </span>
+            )}
+          </Link>
+          <Link href="/products" className="btn-accent hidden px-5 py-2.5 text-sm sm:inline-flex">
             Shop now
           </Link>
         </div>

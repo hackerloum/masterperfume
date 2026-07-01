@@ -5,6 +5,7 @@ import Link from "next/link";
 import Spinner from "./Spinner";
 import { createOrder, generateOrderCode } from "@/lib/orders";
 import { saveOrder } from "@/lib/myOrders";
+import { useCart } from "@/lib/cart";
 import { isFirebaseConfigured } from "@/lib/firebase";
 import { buildWhatsAppLink, formatPrice, salePrice, siteConfig } from "@/lib/config";
 import { IconCheck, IconWhatsApp } from "./icons";
@@ -44,6 +45,28 @@ export default function OrderForm({
   const [errorMsg, setErrorMsg] = useState("");
   const [whatsAppLink, setWhatsAppLink] = useState("");
   const [orderCode, setOrderCode] = useState("");
+  const [added, setAdded] = useState(false);
+  const { add } = useCart();
+
+  function handleAddToCart() {
+    if (!size) {
+      setErrorMsg("Please select a size.");
+      setStatus("error");
+      return;
+    }
+    add({
+      productId: product.id,
+      name: product.name,
+      imageUrl: product.imageUrl,
+      oilColor: product.oilColor,
+      bottle: bottle?.name ?? "",
+      sizeMl: size.sizeMl,
+      unitPrice,
+      qty: quantity,
+    });
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
+  }
 
   const unitPrice = size ? salePrice(size.price, product.discountPercent) : 0;
   const total = unitPrice * quantity;
@@ -333,9 +356,18 @@ export default function OrderForm({
       )}
 
       <button
+        type="button"
+        onClick={handleAddToCart}
+        disabled={availableSizes.length === 0}
+        className="btn-outline mt-5 w-full"
+      >
+        {added ? "✓ Added to cart" : "Add to cart"}
+      </button>
+
+      <button
         type="submit"
         disabled={status === "submitting" || availableSizes.length === 0}
-        className="btn-accent mt-5 w-full"
+        className="btn-accent mt-3 w-full"
       >
         {status === "submitting" ? (
           <>
@@ -343,9 +375,12 @@ export default function OrderForm({
             Placing order…
           </>
         ) : (
-          "Place Order"
+          "Buy Now"
         )}
       </button>
+      <p className="mt-2 text-center text-xs text-ink/40">
+        “Buy Now” places this single item · “Add to cart” to order several
+      </p>
     </form>
   );
 }

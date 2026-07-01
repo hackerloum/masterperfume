@@ -94,3 +94,12 @@ export async function getOrderByCode(code: string): Promise<Order | null> {
   if (snap.empty) return null;
   return toOrder(snap.docs[0]);
 }
+
+/** All order line-items sharing a tracking code (a cart checkout creates many). */
+export async function getOrdersByCode(code: string): Promise<Order[]> {
+  const normalized = code.trim().toUpperCase();
+  if (!normalized) return [];
+  const q = query(collection(db, COLLECTION), where("code", "==", normalized));
+  const snap = await getDocs(q);
+  return snap.docs.map(toOrder);
+}

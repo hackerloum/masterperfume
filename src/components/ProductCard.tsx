@@ -1,9 +1,13 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/types";
 import { formatPrice, salePrice } from "@/lib/config";
+import { useWishlist } from "@/lib/wishlist";
 import BottleSilhouette from "./bottle/BottleSilhouette";
 import Stars from "./Stars";
+import { IconHeart } from "./icons";
 
 /** Returns the lowest price across a product's sizes ("starting price"). */
 function startingPrice(product: Product): number | null {
@@ -13,6 +17,8 @@ function startingPrice(product: Product): number | null {
 
 export default function ProductCard({ product }: { product: Product }) {
   const from = startingPrice(product);
+  const { has, toggle } = useWishlist();
+  const wished = has(product.id);
 
   return (
     <Link href={`/products/${product.id}`} className="group flex flex-col">
@@ -39,10 +45,25 @@ export default function ProductCard({ product }: { product: Product }) {
           {product.category}
         </span>
         {product.discountPercent > 0 && (
-          <span className="absolute right-3 top-3 rounded-full bg-red-500 px-2 py-1 text-[0.65rem] font-bold text-white shadow">
+          <span className="absolute left-3 top-11 rounded-full bg-red-500 px-2 py-1 text-[0.65rem] font-bold text-white shadow">
             -{product.discountPercent}%
           </span>
         )}
+
+        {/* Wishlist heart */}
+        <button
+          type="button"
+          aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
+          onClick={(e) => {
+            e.preventDefault();
+            toggle(product.id);
+          }}
+          className={`absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow backdrop-blur transition ${
+            wished ? "text-red-500" : "text-ink/40 hover:text-red-500"
+          }`}
+        >
+          <IconHeart className="h-4 w-4" filled={wished} />
+        </button>
       </div>
 
       <div className="flex items-start justify-between gap-3 pt-3">

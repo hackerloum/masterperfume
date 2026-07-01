@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Spinner from "./Spinner";
-import { getOrderByCode } from "@/lib/orders";
+import { getOrdersByCode } from "@/lib/orders";
 import { getSavedOrders, type SavedOrder } from "@/lib/myOrders";
 import { isFirebaseConfigured } from "@/lib/firebase";
 import { formatPrice } from "@/lib/config";
@@ -25,7 +25,7 @@ const statusStyles: Record<OrderStatus, string> = {
 export default function TrackOrder() {
   const params = useSearchParams();
   const [code, setCode] = useState("");
-  const [order, setOrder] = useState<Order | null>(null);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [status, setStatus] = useState<"idle" | "loading" | "notfound" | "found">(
     "idle"
   );
@@ -52,11 +52,11 @@ export default function TrackOrder() {
     }
     setStatus("loading");
     setError("");
-    setOrder(null);
+    setOrders([]);
     try {
-      const found = await getOrderByCode(value);
-      if (found) {
-        setOrder(found);
+      const found = await getOrdersByCode(value);
+      if (found.length) {
+        setOrders(found);
         setStatus("found");
       } else {
         setStatus("notfound");
@@ -73,7 +73,9 @@ export default function TrackOrder() {
     lookup(code);
   }
 
-  const currentStep = order ? ORDER_STATUSES.indexOf(order.status) : -1;
+  const head = orders[0] ?? null;
+  const currentStep = head ? ORDER_STATUSES.indexOf(head.status) : -1;
+  const grandTotal = orders.reduce((n, o) => n + o.price * o.quantity, 0);
 
   return (
     <section className="container-px max-w-2xl py-12 pb-24">
@@ -118,21 +120,21 @@ export default function TrackOrder() {
       )}
 
       {/* Result */}
-      {status === "found" && order && (
+      {status === "found" && head && (
         <div className="mt-6 rounded-2xl border border-ink/10 bg-white p-6 shadow-card">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
               <p className="text-xs uppercase tracking-wide text-ink/40">
-                Order {order.code}
+                Order {head.code}
               </p>
               <h2 className="font-serif text-xl font-700 text-ink">
-                {order.productName}
+                {orders.length} item{orders.length === 1 ? "" : "s"}
               </h2>
             </div>
             <span
-              className={`rounded-full px-3 py-1 text-xs font-medium capitalize ${statusStyles[order.status]}`}
+              className={`rounded-full px-3 py-1 text-xs font-medium capitalize ${statusStyles[head.status]}`}
             >
-              {order.status}
+              {head.status}
             </span>
           </div>
 
@@ -166,23 +168,27 @@ export default function TrackOrder() {
             })}
           </ol>
 
-          {/* Details */}
-          <div className="mt-6 grid gap-1 border-t border-ink/10 pt-4 text-sm text-ink/70 sm:grid-cols-2">
-            <p>
-              <span className="text-ink/40">Bottle:</span>{" "}
-              {order.bottleStyle || "—"}
-            </p>
-            <p>
-              <span className="text-ink/40">Size:</span> {order.selectedSize}ml ×{" "}
-              {order.quantity}
-            </p>
-            <p>
-              <span className="text-ink/40">Total:</span>{" "}
-              {formatPrice(order.price * order.quantity)}
-            </p>
-            <p>
-              <span className="text-ink/40">Placed:</span>{" "}
-              {new Date(order.createdAt).toLocaleDateString()}
+          {/* Items */}
+          <div className="mt-6 space-y-2 border-t border-ink/10 pt-4 text-sm text-ink/70">
+            {orders.map((o) => (
+              <div key={o.id} className="flex items-center justify-between gap-3">
+                <span className="min-w-0 truncate">
+                  {o.productName}{" "}
+                  <span className="text-ink/40">
+                    ({o.bottleStyle || "bottle"} · {o.selectedSize}ml × {o.quantity})
+                  </span>
+                </span>
+                <span className="shrink-0 font-medium text-ink">
+                  {formatPrice(o.price * o.quantity)}
+                </span>
+              </div>
+            ))}
+            <div className="flex items-center justify-between border-t border-ink/10 pt-2 font-medium text-ink">
+              <span>Total</span>
+              <span>{formatPrice(grandTotal)}</span>
+            </div>
+            <p className="pt-1 text-xs text-ink/40">
+              Placed {new Date(head.createdAt).toLocaleDateString()}
             </p>
           </div>
         </div>
