@@ -109,16 +109,16 @@ The site is crawlable (`/robots.txt`, `/sitemap.xml`, server-rendered product
 HTML, and structured data). Google still will not list you until it **discovers
 and indexes** the live URL — that is not instant.
 
-1. Set `NEXT_PUBLIC_SITE_URL` in Vercel to your **real public domain** (no
-   trailing slash), e.g. `https://www.yourdomain.com`. If this is missing,
-   sitemap/canonical tags point at `https://masterperfume.vercel.app`.
+1. Canonical URL is `https://www.masterperfume.co.tz` (`NEXT_PUBLIC_SITE_URL`).
+   Set the same value in Vercel so production matches.
 2. In [Google Search Console](https://search.google.com/search-console), add
-   that same domain (or URL prefix), verify ownership, then submit
-   `https://your-domain/sitemap.xml`.
+   `https://www.masterperfume.co.tz`, verify ownership, then submit
+   `https://www.masterperfume.co.tz/sitemap.xml`.
 3. Optional: paste the Search Console HTML-tag token into
    `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` and redeploy.
-4. Request indexing for `/` and `/products` in Search Console. New sites often
-   take days to weeks to show, especially with little inbound traffic.
+4. Request indexing for `https://www.masterperfume.co.tz/` and
+   `https://www.masterperfume.co.tz/products`. New sites often take days to
+   weeks to show, especially with little inbound traffic.
 
 Cart, wishlist, track, and admin are `noindex` so they do not dilute the shop
 pages.

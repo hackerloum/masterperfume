@@ -1,7 +1,7 @@
 /**
  * Shared SEO helpers: canonical URLs, metadata, and JSON-LD graphs.
- * Keep crawlable pages pointing at SITE_URL so Google does not see
- * duplicate vercel.app vs custom-domain versions.
+ * Keep crawlable pages pointing at SITE_URL so Google indexes
+ * https://www.masterperfume.co.tz rather than a preview/Vercel hostname.
  */
 import type { Metadata } from "next";
 import { instagramUrl, salePrice, siteConfig } from "./config";
@@ -39,6 +39,7 @@ export const defaultMetadata: Metadata = {
     "fragrance Tanzania",
     "oud perfume",
     "Master Perfume TZ",
+    "masterperfume.co.tz",
     "long lasting perfume",
     "roll on perfume",
   ],
