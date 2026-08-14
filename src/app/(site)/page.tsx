@@ -47,18 +47,18 @@ export default async function HomePage() {
       <JsonLd data={storeJsonLd()} />
       <JsonLd data={itemListJsonLd(products)} />
       <HeroBanner banners={banners} />
+      <Benefits />
       <PromoTiles />
+      <CategoryShowcase />
       <OnSale products={onSale} />
       <FeaturedProducts products={featured} />
-      <ProductSpotlight product={featured[0] ?? null} />
       <HomeRows products={products} />
-      <CategoryShowcase />
+      <ProductSpotlight product={featured[0] ?? null} />
       <div className="container-px">
         <RecentlyViewed />
       </div>
-      <Benefits />
       <CtaBand />
-      <StickyCTA label="Shop Perfumes" href="/products" />
+      <StickyCTA label="Shop perfumes" href="/products" />
     </>
   );
 }

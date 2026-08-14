@@ -3,16 +3,19 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { buildWhatsAppLink } from "@/lib/config";
 import { useCart } from "@/lib/cart";
 import { useWishlist } from "@/lib/wishlist";
-import { IconWhatsApp, IconCart, IconHeart } from "./icons";
+import { IconCart, IconHeart } from "./icons";
 
 const links = [
   { href: "/", label: "Home" },
-  { href: "/products", label: "Shop" },
+  { href: "/products", label: "All" },
+  { href: "/products?category=Men", label: "Men" },
+  { href: "/products?category=Women", label: "Women" },
+  { href: "/products?category=Unisex", label: "Unisex" },
+  { href: "/products?sort=discount", label: "Deals" },
   { href: "/faq", label: "FAQ" },
-  { href: "/track", label: "Track Order" },
+  { href: "/track", label: "Track order" },
 ];
 
 export default function Navbar() {
@@ -25,38 +28,88 @@ export default function Navbar() {
   function submitSearch(e: React.FormEvent) {
     e.preventDefault();
     router.push(
-      search.trim() ? `/products?q=${encodeURIComponent(search.trim())}` : "/products"
+      search.trim()
+        ? `/products?q=${encodeURIComponent(search.trim())}`
+        : "/products"
     );
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-ink/[0.06] bg-white/80 backdrop-blur-md">
-      <nav className="container-px flex h-16 items-center justify-between sm:h-18">
-        {/* Brand */}
-        <Link href="/" className="flex items-baseline gap-1.5">
-          <span className="font-serif text-xl font-800 tracking-tight text-ink">
-            Master
-          </span>
-          <span className="text-sm font-medium lowercase tracking-wide text-accent">
+    <header className="sticky top-0 z-40 bg-ink text-white shadow-sm">
+      <nav className="container-px flex flex-wrap items-center gap-2 py-2 sm:gap-3 sm:py-2.5">
+        <Link href="/" className="flex shrink-0 items-baseline gap-1 pr-1">
+          <span className="text-lg font-800 tracking-tight sm:text-xl">Master</span>
+          <span className="text-sm font-semibold lowercase tracking-wide text-accent">
             perfume
           </span>
         </Link>
 
-        {/* Center links (desktop) */}
-        <ul className="hidden items-center gap-10 sm:flex">
+        <form onSubmit={submitSearch} className="order-3 flex min-w-0 flex-1 basis-full sm:order-none sm:basis-0">
+          <div className="flex w-full overflow-hidden rounded-md">
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search perfumes, brands, sizes…"
+              className="min-w-0 flex-1 border-0 bg-white px-3 py-2 text-sm text-ink placeholder:text-ink/40 focus:outline-none focus:ring-2 focus:ring-accent"
+            />
+            <button
+              type="submit"
+              aria-label="Search"
+              className="bg-accent px-3 text-ink hover:bg-accent-dark hover:text-white sm:px-4"
+            >
+              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4}>
+                <circle cx="11" cy="11" r="7" />
+                <path d="M21 21l-4-4" strokeLinecap="round" />
+              </svg>
+            </button>
+          </div>
+        </form>
+
+        <div className="ml-auto flex items-center gap-1 sm:gap-2">
+          <Link
+            href="/wishlist"
+            aria-label="Wishlist"
+            className="relative rounded-md p-2 text-white/90 hover:bg-white/10"
+          >
+            <IconHeart className="h-5 w-5" />
+            {wishCount > 0 && (
+              <span className="absolute right-0.5 top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[0.6rem] font-bold text-ink">
+                {wishCount}
+              </span>
+            )}
+          </Link>
+          <Link
+            href="/cart"
+            aria-label="Cart"
+            className="relative rounded-md p-2 text-white/90 hover:bg-white/10"
+          >
+            <IconCart className="h-5 w-5" />
+            {cartCount > 0 && (
+              <span className="absolute right-0.5 top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[0.6rem] font-bold text-ink">
+                {cartCount}
+              </span>
+            )}
+            <span className="ml-1 hidden text-xs font-semibold sm:inline">Cart</span>
+          </Link>
+        </div>
+      </nav>
+
+      <div className="border-t border-white/10 bg-[#1a1a1a]">
+        <ul className="container-px flex gap-1 overflow-x-auto py-1.5 text-[0.8rem] font-medium [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {links.map((link) => {
+            const pathOnly = link.href.split("?")[0];
             const active =
-              link.href === "/"
+              pathOnly === "/"
                 ? pathname === "/"
-                : pathname.startsWith(link.href);
+                : pathname === pathOnly || pathname.startsWith(`${pathOnly}/`);
             return (
-              <li key={link.href}>
+              <li key={link.href + link.label}>
                 <Link
                   href={link.href}
-                  className={`text-sm transition-colors ${
+                  className={`whitespace-nowrap rounded-md px-2.5 py-1.5 ${
                     active
-                      ? "font-medium text-ink"
-                      : "text-ink/50 hover:text-ink"
+                      ? "bg-white/15 text-accent"
+                      : "text-white/80 hover:bg-white/10 hover:text-white"
                   }`}
                 >
                   {link.label}
@@ -65,59 +118,7 @@ export default function Navbar() {
             );
           })}
         </ul>
-
-        {/* Actions */}
-        <div className="flex items-center gap-3">
-          <form
-            onSubmit={submitSearch}
-            className="relative hidden md:block"
-          >
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search perfumes…"
-              className="w-44 rounded-full border border-ink/15 bg-white py-2 pl-9 pr-3 text-sm placeholder:text-ink/40 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/15 lg:w-56"
-            />
-            <button
-              type="submit"
-              aria-label="Search"
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/40 hover:text-accent"
-            >
-              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                <circle cx="11" cy="11" r="7" />
-                <path d="M21 21l-4-4" strokeLinecap="round" />
-              </svg>
-            </button>
-          </form>
-          <Link
-            href="/wishlist"
-            aria-label="Wishlist"
-            className="relative p-1.5 text-ink/70 transition hover:text-accent"
-          >
-            <IconHeart className="h-5 w-5" />
-            {wishCount > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[0.6rem] font-bold text-white">
-                {wishCount}
-              </span>
-            )}
-          </Link>
-          <Link
-            href="/cart"
-            aria-label="Cart"
-            className="relative p-1.5 text-ink/70 transition hover:text-accent"
-          >
-            <IconCart className="h-5 w-5" />
-            {cartCount > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[0.6rem] font-bold text-white">
-                {cartCount}
-              </span>
-            )}
-          </Link>
-          <Link href="/products" className="btn-accent hidden px-5 py-2.5 text-sm sm:inline-flex">
-            Shop now
-          </Link>
-        </div>
-      </nav>
+      </div>
     </header>
   );
 }

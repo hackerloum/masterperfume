@@ -28,16 +28,11 @@ export default async function ProductsPage() {
       />
       <JsonLd data={itemListJsonLd(products)} />
       <section className="border-b border-ink/10 bg-white">
-        <div className="container-px py-14 text-center sm:py-16">
-          <p className="eyebrow">The Collection</p>
-          <h1 className="mt-3 font-serif text-4xl font-700 text-ink sm:text-5xl">
-            Our Perfumes
-          </h1>
-          <p className="mx-auto mt-3 max-w-md text-ink/55">
-            Find your signature scent in Tanzania. Order in seconds — no account
-            needed.
+        <div className="container-px py-4 sm:py-5">
+          <h1 className="text-xl font-bold text-ink sm:text-2xl">All perfumes</h1>
+          <p className="mt-1 text-sm text-ink/60">
+            Filter by category, search, and order on WhatsApp — no account needed.
           </p>
-          <div className="accent-rule mt-5" />
         </div>
       </section>
 

@@ -4,51 +4,50 @@ import { IconArrowRight } from "./icons";
 const tiles = [
   {
     eyebrow: "Just in",
-    title: "New Arrivals",
-    text: "Fresh scents added to the collection.",
+    title: "New arrivals",
+    text: "Latest scents in stock.",
     href: "/products",
     className: "bg-ink text-white",
-    accent: "text-accent-light",
+    accent: "text-accent",
   },
   {
-    eyebrow: "Most loved",
-    title: "Best Sellers",
-    text: "The fragrances everyone keeps re-ordering.",
-    href: "/products",
-    className: "bg-accent text-white",
-    accent: "text-white/80",
+    eyebrow: "Save",
+    title: "Today's deals",
+    text: "Discounted sizes and bottles.",
+    href: "/products?sort=discount",
+    className: "bg-accent text-ink",
+    accent: "text-ink/70",
   },
   {
-    eyebrow: "Save more",
-    title: "Bundle Deals",
-    text: "Mix sizes and save on bigger orders.",
+    eyebrow: "Popular",
+    title: "Best sellers",
+    text: "Most ordered this week.",
     href: "/products",
-    className: "bg-cream text-ink",
+    className: "bg-white text-ink border border-ink/10",
     accent: "text-accent-dark",
   },
 ];
 
-/** Row of promotional banner tiles — classic store merchandising. */
 export default function PromoTiles() {
   return (
-    <section className="container-px py-10 sm:py-12">
-      <div className="grid gap-4 sm:grid-cols-3">
+    <section className="container-px py-3 sm:py-4">
+      <div className="grid gap-3 sm:grid-cols-3">
         {tiles.map((t) => (
           <Link
             key={t.title}
             href={t.href}
-            className={`group relative flex flex-col justify-between overflow-hidden rounded-2xl p-6 transition hover:-translate-y-0.5 hover:shadow-card-hover ${t.className}`}
+            className={`group flex flex-col justify-between rounded-md p-4 shadow-card transition hover:shadow-card-hover ${t.className}`}
           >
             <div>
-              <p className={`text-xs font-semibold uppercase tracking-widest ${t.accent}`}>
+              <p className={`text-[0.7rem] font-bold uppercase tracking-wide ${t.accent}`}>
                 {t.eyebrow}
               </p>
-              <h3 className="mt-2 font-serif text-2xl font-700">{t.title}</h3>
-              <p className="mt-1 text-sm opacity-80">{t.text}</p>
+              <h3 className="mt-1 text-lg font-bold">{t.title}</h3>
+              <p className="mt-0.5 text-sm opacity-80">{t.text}</p>
             </div>
-            <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium">
-              Shop now
-              <IconArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold">
+              Shop
+              <IconArrowRight className="h-4 w-4" />
             </span>
           </Link>
         ))}

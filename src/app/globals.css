@@ -8,51 +8,48 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-white text-ink font-sans antialiased;
+    @apply bg-[#f4f4f4] text-ink font-sans antialiased;
   }
   h1,
   h2,
   h3 {
-    @apply font-serif tracking-tight;
+    @apply font-sans tracking-tight;
   }
   ::selection {
-    @apply bg-accent/20 text-ink;
+    @apply bg-accent/40 text-ink;
   }
 }
 
 @layer components {
-  /* Primary accent button */
+  /* Gold CTA — black label on gold, marketplace style */
   .btn-accent {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-accent px-6 py-3
-      text-sm font-medium text-white transition-all duration-200
-      hover:bg-accent-dark active:scale-[0.98]
+    @apply inline-flex items-center justify-center gap-2 rounded-md bg-accent px-5 py-2.5
+      text-sm font-semibold text-ink transition-all duration-150
+      hover:bg-accent-dark hover:text-white active:scale-[0.99]
       disabled:cursor-not-allowed disabled:opacity-50;
   }
 
-  /* Dark button */
   .btn-dark {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-ink px-6 py-3
-      text-sm font-medium text-white transition-all duration-200
-      hover:bg-charcoal active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-md bg-ink px-5 py-2.5
+      text-sm font-semibold text-white transition-all duration-150
+      hover:bg-charcoal active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50;
   }
 
-  /* Outline button */
   .btn-outline {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-ink/15
-      bg-transparent px-6 py-3 text-sm font-medium text-ink
-      transition-all duration-200 hover:border-ink hover:bg-ink hover:text-white;
+    @apply inline-flex items-center justify-center gap-2 rounded-md border border-ink/20
+      bg-white px-5 py-2.5 text-sm font-semibold text-ink
+      transition-all duration-150 hover:border-ink hover:bg-ink hover:text-white;
   }
 
-  /* Ghost/light outline (kept for compatibility) */
   .btn-ghost-light {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-ink/15
-      bg-transparent px-6 py-3 text-sm font-medium text-ink
-      transition-all duration-200 hover:border-accent hover:text-accent;
+    @apply inline-flex items-center justify-center gap-2 rounded-md border border-ink/20
+      bg-white px-5 py-2.5 text-sm font-semibold text-ink
+      transition-all duration-150 hover:border-accent hover:text-ink;
   }
 
   .input-field {
-    @apply w-full rounded-lg border border-ink/10 bg-white px-4 py-3 text-ink
-      transition placeholder:text-ink/35 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/15;
+    @apply w-full rounded-md border border-ink/15 bg-white px-4 py-2.5 text-ink
+      transition placeholder:text-ink/35 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30;
   }
 
   .label {
@@ -60,20 +57,30 @@
   }
 
   .container-px {
-    @apply mx-auto w-full max-w-6xl px-5 sm:px-6 lg:px-8;
+    @apply mx-auto w-full max-w-[1400px] px-3 sm:px-4 lg:px-6;
   }
 
   .badge {
-    @apply inline-block rounded-full bg-cream px-3 py-1 text-[0.7rem] font-medium text-ink/70;
+    @apply inline-block rounded-sm bg-cream px-2 py-0.5 text-[0.7rem] font-semibold text-ink/70;
   }
 
-  /* Section eyebrow label */
   .eyebrow {
-    @apply text-xs font-medium uppercase tracking-[0.2em] text-accent;
+    @apply text-xs font-bold uppercase tracking-wide text-ink/50;
   }
 
-  /* Thin accent divider rule */
   .accent-rule {
-    @apply mx-auto h-px w-12 bg-accent/40;
+    @apply h-0.5 w-10 bg-accent;
+  }
+
+  .section-head {
+    @apply mb-3 flex items-baseline justify-between gap-3 border-b border-ink/10 pb-2;
+  }
+
+  .section-title {
+    @apply text-lg font-bold text-ink sm:text-xl;
+  }
+
+  .section-link {
+    @apply shrink-0 text-sm font-semibold text-ink underline-offset-2 hover:text-accent-dark hover:underline;
   }
 }

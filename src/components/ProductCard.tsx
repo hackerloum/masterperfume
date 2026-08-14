@@ -9,7 +9,6 @@ import BottleSilhouette from "./bottle/BottleSilhouette";
 import Stars from "./Stars";
 import { IconHeart } from "./icons";
 
-/** Returns the lowest price across a product's sizes ("starting price"). */
 function startingPrice(product: Product): number | null {
   if (!product.sizes.length) return null;
   return Math.min(...product.sizes.map((s) => s.price));
@@ -21,13 +20,15 @@ export default function ProductCard({ product }: { product: Product }) {
   const wished = has(product.id);
 
   return (
-    <Link href={`/products/${product.id}`} className="group flex flex-col">
-      <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-cream">
-        {/* Tinted bottle preview (behind any photo) */}
+    <Link
+      href={`/products/${product.id}`}
+      className="group flex flex-col rounded-md border border-ink/10 bg-white p-2 shadow-card transition hover:shadow-card-hover"
+    >
+      <div className="relative aspect-square overflow-hidden rounded-sm bg-cream">
         <div className="absolute inset-0 flex items-center justify-center">
           <BottleSilhouette
             oilColor={product.oilColor}
-            className="h-[72%] w-auto transition-transform duration-500 group-hover:scale-105"
+            className="h-[72%] w-auto"
           />
         </div>
 
@@ -36,21 +37,17 @@ export default function ProductCard({ product }: { product: Product }) {
             src={product.imageUrl}
             alt={`${product.name} ${product.category} perfume`}
             fill
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+            className="object-cover"
           />
         )}
 
-        <span className="absolute left-3 top-3 badge bg-white/90 backdrop-blur">
-          {product.category}
-        </span>
         {product.discountPercent > 0 && (
-          <span className="absolute left-3 top-11 rounded-full bg-red-500 px-2 py-1 text-[0.65rem] font-bold text-white shadow">
+          <span className="absolute left-2 top-2 rounded-sm bg-red-600 px-1.5 py-0.5 text-[0.65rem] font-bold text-white">
             -{product.discountPercent}%
           </span>
         )}
 
-        {/* Wishlist heart */}
         <button
           type="button"
           aria-label={wished ? "Remove from wishlist" : "Add to wishlist"}
@@ -58,7 +55,7 @@ export default function ProductCard({ product }: { product: Product }) {
             e.preventDefault();
             toggle(product.id);
           }}
-          className={`absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow backdrop-blur transition ${
+          className={`absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-sm bg-white/95 shadow ${
             wished ? "text-red-500" : "text-ink/40 hover:text-red-500"
           }`}
         >
@@ -66,36 +63,36 @@ export default function ProductCard({ product }: { product: Product }) {
         </button>
       </div>
 
-      <div className="flex items-start justify-between gap-3 pt-3">
-        <div className="min-w-0">
-          <h3 className="truncate font-serif text-base font-600 text-ink group-hover:text-accent">
-            {product.name}
-          </h3>
-          <p className="mt-0.5 text-xs text-ink/40">
-            {product.sizes.map((s) => `${s.sizeMl}ml`).join(" · ")}
-          </p>
-        </div>
-        <div className="shrink-0 text-right">
+      <div className="flex flex-1 flex-col pt-2">
+        <p className="text-[0.65rem] font-semibold uppercase text-ink/45">
+          {product.category}
+        </p>
+        <h3 className="mt-0.5 line-clamp-2 text-sm font-semibold text-ink group-hover:text-accent-dark">
+          {product.name}
+        </h3>
+        <p className="mt-0.5 text-xs text-ink/45">
+          {product.sizes.map((s) => `${s.sizeMl}ml`).join(" · ")}
+        </p>
+        <Stars productId={product.id} className="mt-1" />
+        <div className="mt-auto pt-1.5">
           {from !== null ? (
             product.discountPercent > 0 ? (
-              <>
-                <p className="text-sm font-semibold text-red-600">
+              <div className="flex flex-wrap items-baseline gap-1.5">
+                <p className="text-base font-bold text-ink">
                   {formatPrice(salePrice(from, product.discountPercent))}
                 </p>
-                <p className="text-[0.7rem] text-ink/40 line-through">
+                <p className="text-xs text-ink/40 line-through">
                   {formatPrice(from)}
                 </p>
-              </>
+              </div>
             ) : (
-              <p className="text-sm font-medium text-ink">{formatPrice(from)}</p>
+              <p className="text-base font-bold text-ink">{formatPrice(from)}</p>
             )
           ) : (
             <p className="text-sm font-medium text-ink">—</p>
           )}
         </div>
       </div>
-
-      <Stars productId={product.id} className="mt-1.5" />
     </Link>
   );
 }

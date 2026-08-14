@@ -1,28 +1,29 @@
+import Link from "next/link";
 import ProductCard from "./ProductCard";
 import { soldFor } from "@/lib/social";
 import type { Product } from "@/types";
 
 function Row({
-  eyebrow,
   title,
+  href,
   products,
 }: {
-  eyebrow: string;
   title: string;
+  href: string;
   products: Product[];
 }) {
   if (products.length === 0) return null;
   return (
-    <div className="mb-10">
-      <div className="mb-5">
-        <p className="eyebrow">{eyebrow}</p>
-        <h2 className="mt-1 font-serif text-2xl font-800 text-ink sm:text-3xl">
-          {title}
-        </h2>
+    <div className="mb-6 last:mb-0">
+      <div className="section-head">
+        <h2 className="section-title">{title}</h2>
+        <Link href={href} className="section-link">
+          See all
+        </Link>
       </div>
-      <div className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-3 sm:mx-0 sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="-mx-1 flex snap-x gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {products.map((p) => (
-          <div key={p.id} className="w-40 shrink-0 snap-start sm:w-52">
+          <div key={p.id} className="w-40 shrink-0 snap-start sm:w-48">
             <ProductCard product={p} />
           </div>
         ))}
@@ -31,7 +32,6 @@ function Row({
   );
 }
 
-/** New Arrivals / Best Sellers / Trending rows (dynamic from the catalog). */
 export default function HomeRows({ products }: { products: Product[] }) {
   if (products.length === 0) return null;
 
@@ -46,10 +46,10 @@ export default function HomeRows({ products }: { products: Product[] }) {
     .slice(0, 12);
 
   return (
-    <section className="container-px py-8 sm:py-12">
-      <Row eyebrow="Just landed" title="New Arrivals" products={newArrivals} />
-      <Row eyebrow="Most loved" title="Best Sellers" products={bestSellers} />
-      <Row eyebrow="Popular now" title="Trending" products={trending} />
+    <section className="container-px py-2 sm:py-4">
+      <Row title="New arrivals" href="/products" products={newArrivals} />
+      <Row title="Best sellers" href="/products" products={bestSellers} />
+      <Row title="Trending" href="/products?sort=discount" products={trending} />
     </section>
   );
 }

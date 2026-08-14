@@ -3,39 +3,39 @@ import { IconClock, IconDroplet, IconTag, IconTruck } from "./icons";
 const benefits = [
   {
     Icon: IconClock,
-    title: "Long Lasting",
-    text: "Fragrances that stay with you all day.",
+    title: "Long lasting",
+    text: "Scents that stay all day.",
   },
   {
     Icon: IconDroplet,
-    title: "Perfume za Kupima",
-    text: "Buy by measure — pay only for what you need.",
+    title: "Perfume za kupima",
+    text: "Pay only for the size you need.",
   },
   {
     Icon: IconTag,
-    title: "Affordable Sizes",
-    text: "From small testers to full bottles.",
+    title: "Clear prices",
+    text: "Sizes from testers to 100ml.",
   },
   {
     Icon: IconTruck,
-    title: "Delivery Available",
-    text: "We deliver right to your location.",
+    title: "Delivery",
+    text: "We deliver to your location.",
   },
 ];
 
 export default function Benefits() {
   return (
-    <section className="bg-cream">
-      <div className="container-px grid grid-cols-2 gap-x-6 gap-y-10 py-16 sm:grid-cols-4">
+    <section className="border-y border-ink/10 bg-white">
+      <div className="container-px grid grid-cols-2 gap-px bg-ink/10 sm:grid-cols-4">
         {benefits.map(({ Icon, title, text }) => (
-          <div key={title} className="flex flex-col items-center text-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-accent">
-              <Icon className="h-5 w-5" />
+          <div key={title} className="flex items-start gap-3 bg-white px-3 py-4 sm:px-4">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-accent/20 text-ink">
+              <Icon className="h-4 w-4" />
             </div>
-            <h3 className="mt-4 text-sm font-semibold text-ink">{title}</h3>
-            <p className="mt-1 max-w-[12rem] text-sm leading-relaxed text-ink/50">
-              {text}
-            </p>
+            <div>
+              <h3 className="text-sm font-bold text-ink">{title}</h3>
+              <p className="mt-0.5 text-xs leading-relaxed text-ink/55">{text}</p>
+            </div>
           </div>
         ))}
       </div>

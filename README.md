@@ -11,8 +11,9 @@ WhatsApp to confirm.
 ## Tech Stack
 
 - **Next.js 14** (App Router) + **TypeScript**
-- **Tailwind CSS** — bright & minimal, white with a single sage-green accent
-  (change the `accent` color in `tailwind.config.ts` to re-theme the whole site)
+- **Tailwind CSS** — gold (`#C9A227`) and black storefront chrome, marketplace
+  layout (Amazon / Alibaba / eBay style). Edit `accent` in `tailwind.config.ts`
+  to change the gold.
 - **Firebase Firestore** (products & orders) + **Firebase Storage** (images)
 - Deployable on **Vercel**
 

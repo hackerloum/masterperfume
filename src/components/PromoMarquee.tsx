@@ -15,7 +15,7 @@ export default function PromoMarquee() {
     <div className="flex shrink-0 items-center gap-10 pr-10">
       {items.map((it, i) => (
         <span key={i} className="flex items-center gap-2 whitespace-nowrap text-sm font-medium">
-          <it.Icon className="h-4 w-4 text-accent-light" />
+          <it.Icon className="h-4 w-4 text-accent" />
           {it.text}
         </span>
       ))}
@@ -23,7 +23,7 @@ export default function PromoMarquee() {
   );
 
   return (
-    <div className="overflow-hidden rounded-full bg-ink py-2.5 text-white">
+    <div className="overflow-hidden rounded-md bg-ink py-2 text-white">
       <div className="flex w-max animate-marquee">
         {row}
         {row}

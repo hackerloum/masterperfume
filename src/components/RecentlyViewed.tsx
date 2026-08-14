@@ -30,16 +30,13 @@ export default function RecentlyViewed({
   if (items.length === 0) return null;
 
   return (
-    <section className="mt-14">
-      <div className="mb-6">
-        <p className="eyebrow">Keep browsing</p>
-        <h2 className="mt-1 font-serif text-2xl font-800 text-ink sm:text-3xl">
-          {title}
-        </h2>
+    <section className="py-4 sm:py-6">
+      <div className="section-head">
+        <h2 className="section-title">{title}</h2>
       </div>
-      <div className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-3 sm:mx-0 sm:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="-mx-1 flex snap-x gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {items.map((p) => (
-          <div key={p.id} className="w-40 shrink-0 snap-start sm:w-52">
+          <div key={p.id} className="w-40 shrink-0 snap-start sm:w-48">
             <ProductCard product={p} />
           </div>
         ))}

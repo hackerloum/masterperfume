@@ -120,7 +120,7 @@ export default function ProductsClient({
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+            className={`rounded-md px-3 py-1.5 text-sm font-medium transition ${
               filter === f
                 ? "bg-ink text-white shadow-sm"
                 : "border border-ink/15 bg-white text-ink/60 hover:border-accent hover:text-ink"
@@ -182,7 +182,7 @@ export default function ProductsClient({
 
       {/* Grid */}
       {visible.length > 0 && (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-5">
           {visible.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}

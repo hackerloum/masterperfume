@@ -4,68 +4,56 @@ import { IconInstagram, IconWhatsApp } from "./icons";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-ink/[0.06] bg-white">
-      <div className="container-px grid gap-10 py-14 sm:grid-cols-3">
+    <footer className="bg-ink text-white">
+      <div className="container-px grid gap-8 py-10 sm:grid-cols-3">
         <div>
           <Link href="/" className="flex items-baseline gap-1.5">
-            <span className="font-serif text-xl font-800 tracking-tight text-ink">
-              Master
-            </span>
-            <span className="text-sm font-medium text-accent">perfume</span>
+            <span className="text-xl font-800 tracking-tight">Master</span>
+            <span className="text-sm font-semibold text-accent">perfume</span>
           </Link>
-          <p className="mt-4 max-w-xs text-sm leading-relaxed text-ink/50">
-            {siteConfig.slogan}. Buy perfume in Tanzania — long-lasting
-            fragrances mixed to order (perfume za kupima) and delivered to your
-            door.
+          <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/60">
+            Buy perfume in Tanzania — mixed to order (perfume za kupima) and
+            delivered to your door.
           </p>
         </div>
 
         <div className="text-sm">
-          <p className="mb-4 text-xs font-medium uppercase tracking-[0.15em] text-ink/40">
-            Explore
+          <p className="mb-3 text-xs font-bold uppercase tracking-wide text-accent">
+            Shop
           </p>
-          <ul className="space-y-3 text-ink/60">
+          <ul className="space-y-2 text-white/70">
             <li>
-              <Link href="/" className="transition hover:text-accent">
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link href="/products" className="transition hover:text-accent">
+              <Link href="/products" className="hover:text-accent">
                 All perfumes
               </Link>
             </li>
             <li>
-              <Link
-                href="/products?category=Men"
-                className="transition hover:text-accent"
-              >
-                Men&apos;s perfume
+              <Link href="/products?category=Men" className="hover:text-accent">
+                Men
               </Link>
             </li>
             <li>
-              <Link
-                href="/products?category=Women"
-                className="transition hover:text-accent"
-              >
-                Women&apos;s perfume
+              <Link href="/products?category=Women" className="hover:text-accent">
+                Women
               </Link>
             </li>
             <li>
-              <Link
-                href="/products?category=Unisex"
-                className="transition hover:text-accent"
-              >
-                Unisex perfume
+              <Link href="/products?category=Unisex" className="hover:text-accent">
+                Unisex
               </Link>
             </li>
             <li>
-              <Link href="/track" className="transition hover:text-accent">
+              <Link href="/products?sort=discount" className="hover:text-accent">
+                Deals
+              </Link>
+            </li>
+            <li>
+              <Link href="/track" className="hover:text-accent">
                 Track order
               </Link>
             </li>
             <li>
-              <Link href="/faq" className="transition hover:text-accent">
+              <Link href="/faq" className="hover:text-accent">
                 FAQ &amp; delivery
               </Link>
             </li>
@@ -73,16 +61,16 @@ export default function Footer() {
         </div>
 
         <div className="text-sm">
-          <p className="mb-4 text-xs font-medium uppercase tracking-[0.15em] text-ink/40">
-            Connect
+          <p className="mb-3 text-xs font-bold uppercase tracking-wide text-accent">
+            Help
           </p>
-          <ul className="space-y-3 text-ink/60">
+          <ul className="space-y-2 text-white/70">
             <li>
               <a
                 href={instagramUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 transition hover:text-accent"
+                className="inline-flex items-center gap-2 hover:text-accent"
               >
                 <IconInstagram className="h-4 w-4" />@{siteConfig.instagramHandle}
               </a>
@@ -94,7 +82,7 @@ export default function Footer() {
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 transition hover:text-accent"
+                className="inline-flex items-center gap-2 hover:text-accent"
               >
                 <IconWhatsApp className="h-4 w-4" />
                 Order on WhatsApp
@@ -104,7 +92,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-ink/[0.06] py-5 text-center text-xs text-ink/40">
+      <div className="border-t border-white/10 py-4 text-center text-xs text-white/40">
         © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
       </div>
     </footer>
