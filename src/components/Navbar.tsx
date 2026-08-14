@@ -11,6 +11,7 @@ import { IconWhatsApp, IconCart, IconHeart } from "./icons";
 const links = [
   { href: "/", label: "Home" },
   { href: "/products", label: "Shop" },
+  { href: "/faq", label: "FAQ" },
   { href: "/track", label: "Track Order" },
 ];
 

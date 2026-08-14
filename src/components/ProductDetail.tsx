@@ -19,17 +19,34 @@ import { addRecentlyViewed } from "@/lib/recentlyViewed";
 import { formatPrice, salePrice } from "@/lib/config";
 import { type Bottle, type Product, type ProductSize } from "@/types";
 
-export default function ProductDetail({ id }: { id: string }) {
-  const [product, setProduct] = useState<Product | null | undefined>(undefined);
-  const [bottles, setBottles] = useState<Bottle[]>([]);
+export default function ProductDetail({
+  id,
+  initialProduct,
+  initialBottles,
+}: {
+  id: string;
+  initialProduct: Product | null;
+  initialBottles: Bottle[];
+}) {
+  const [product, setProduct] = useState<Product | null | undefined>(
+    initialProduct
+  );
+  const [bottles, setBottles] = useState<Bottle[]>(initialBottles);
   const [error, setError] = useState(false);
 
   // Shared configurator state — drives both the 3D preview and the order form.
-  const [bottle, setBottle] = useState<Bottle | null>(null);
+  const [bottle, setBottle] = useState<Bottle | null>(
+    initialBottles[0] ?? null
+  );
   const [size, setSize] = useState<ProductSize | null>(null);
   const [backdrop, setBackdrop] = useState(BACKDROPS[0].id);
 
   useEffect(() => {
+    if (initialProduct) addRecentlyViewed(initialProduct.id);
+    if (initialBottles.length) {
+      setBottle(initialBottles[0]);
+      return;
+    }
     Promise.all([fetchProduct(id), fetchActiveBottles()])
       .then(([p, bs]) => {
         setProduct(p);
@@ -38,7 +55,7 @@ export default function ProductDetail({ id }: { id: string }) {
         if (p) addRecentlyViewed(p.id);
       })
       .catch(() => setError(true));
-  }, [id]);
+  }, [id, initialProduct, initialBottles]);
 
   /**
    * Sizes orderable for the current bottle: the product's priced sizes limited

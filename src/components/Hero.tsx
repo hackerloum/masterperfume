@@ -20,8 +20,9 @@ export default function Hero() {
             <span className="text-accent">masterpiece</span>.
           </h1>
           <p className="mt-5 max-w-md text-base leading-relaxed text-ink/55 animate-fade-up sm:text-lg">
-            Premium fragrances mixed fresh and poured into the bottle you choose.
-            Order in seconds — no account needed.
+            Premium perfume in Tanzania, mixed fresh (perfume za kupima) and
+            poured into the bottle you choose. Order in seconds — no account
+            needed. Delivery available.
           </p>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center animate-fade-up">
@@ -59,7 +60,7 @@ export default function Hero() {
             </div>
             <Image
               src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=900&q=80"
-              alt=""
+              alt="Master Perfume luxury fragrance bottle"
               fill
               priority
               sizes="(max-width: 1024px) 100vw, 50vw"

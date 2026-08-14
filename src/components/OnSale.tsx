@@ -1,10 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import ProductCard from "./ProductCard";
 import Countdown from "./Countdown";
-import { fetchProducts } from "@/lib/data";
 import { IconArrowRight } from "./icons";
 import type { Product } from "@/types";
 
@@ -21,22 +19,8 @@ function saleEndsAt(): number {
 }
 
 /** "Hot Deals" — products currently on sale (discountPercent > 0). */
-export default function OnSale() {
-  const [items, setItems] = useState<Product[] | null>(null);
-
-  useEffect(() => {
-    fetchProducts()
-      .then((all) =>
-        setItems(
-          all
-            .filter((p) => p.discountPercent > 0)
-            .sort((a, b) => b.discountPercent - a.discountPercent)
-        )
-      )
-      .catch(() => setItems([]));
-  }, []);
-
-  if (!items || items.length === 0) return null;
+export default function OnSale({ products }: { products: Product[] }) {
+  if (products.length === 0) return null;
 
   return (
     <section className="container-px py-8 sm:py-12">
@@ -63,7 +47,7 @@ export default function OnSale() {
         </div>
 
         <div className="-mx-1 flex snap-x gap-4 overflow-x-auto px-1 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {items.slice(0, 12).map((p) => (
+          {products.slice(0, 12).map((p) => (
             <div key={p.id} className="w-40 shrink-0 snap-start sm:w-52">
               <ProductCard product={p} />
             </div>

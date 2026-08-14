@@ -1,54 +1,34 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { siteConfig, instagramUrl } from "@/lib/config";
+import { faqs } from "@/lib/faqs";
+import JsonLd from "@/components/JsonLd";
+import { breadcrumbJsonLd, faqJsonLd, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "FAQ & Delivery",
   description:
-    "Common questions about ordering, delivery, payment and returns at Master Perfume.",
-};
-
-const faqs = [
-  {
-    q: "How do I order?",
-    a: "Browse the perfumes, pick your bottle and size, then add to cart or tap “Buy Now”. Fill in your name, phone and location — no account needed. We’ll confirm on WhatsApp.",
-  },
-  {
-    q: "Do I need an account?",
-    a: "No. You can order in seconds without signing up. To check your order later, just use the order code we give you on the Track Order page.",
-  },
-  {
-    q: "What is “perfume za kupima”?",
-    a: "We mix the fragrance oil fresh and pour it into the bottle and size you choose, so you only pay for what you need.",
-  },
-  {
-    q: "How long does delivery take?",
-    a: "Usually 1–2 days within town. Delivery to other areas is arranged on WhatsApp when we confirm your order.",
-  },
-  {
-    q: "How do I pay?",
-    a: "You can pay on delivery, or as agreed with us on WhatsApp. We’ll walk you through it after you place the order.",
-  },
-  {
-    q: "Can I return or exchange?",
-    a: "Because each perfume is mixed fresh to order, we can’t accept returns of opened bottles. If there’s a problem with your order, message us on WhatsApp and we’ll make it right.",
-  },
-  {
-    q: "How do I track my order?",
-    a: "Use the order code from your confirmation on the Track Order page to see whether it’s pending, contacted or completed.",
-  },
-];
+    "Ordering, delivery in Tanzania, payment and returns at Master Perfume. Perfume za kupima mixed fresh and delivered to your door.",
+  path: "/faq",
+});
 
 export default function FaqPage() {
   return (
     <div className="container-px max-w-3xl py-14">
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "FAQ & Delivery", path: "/faq" },
+        ])}
+      />
+      <JsonLd data={faqJsonLd(faqs)} />
       <div className="text-center">
         <p className="eyebrow">Help centre</p>
         <h1 className="mt-3 font-serif text-3xl font-800 text-ink sm:text-4xl">
           FAQ &amp; Delivery
         </h1>
         <p className="mx-auto mt-2 max-w-md text-ink/55">
-          Everything you need to know about ordering from {siteConfig.name}.
+          Everything you need to know about ordering perfume from{" "}
+          {siteConfig.name} in Tanzania.
         </p>
       </div>
 

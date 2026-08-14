@@ -1,24 +1,16 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { fetchFeaturedProducts } from "@/lib/data";
 import { formatPrice } from "@/lib/config";
 import { IconArrowRight } from "./icons";
 import BottleSilhouette from "./bottle/BottleSilhouette";
 import type { Product } from "@/types";
 
 /** Large promotional banner spotlighting one featured product (an "ad"). */
-export default function ProductSpotlight() {
-  const [product, setProduct] = useState<Product | null>(null);
-
-  useEffect(() => {
-    fetchFeaturedProducts()
-      .then((list) => setProduct(list[0] ?? null))
-      .catch(() => setProduct(null));
-  }, []);
-
+export default function ProductSpotlight({
+  product,
+}: {
+  product: Product | null;
+}) {
   if (!product) return null;
 
   const from = product.sizes.length
@@ -28,7 +20,6 @@ export default function ProductSpotlight() {
   return (
     <section className="container-px py-10 sm:py-14">
       <div className="grid overflow-hidden rounded-3xl bg-ink text-white sm:grid-cols-2">
-        {/* Copy */}
         <div className="flex flex-col justify-center p-8 sm:p-12">
           <p className="text-xs font-semibold uppercase tracking-widest text-accent-light">
             Featured this week
@@ -58,7 +49,6 @@ export default function ProductSpotlight() {
           </div>
         </div>
 
-        {/* Visual */}
         <div className="relative min-h-[260px] bg-gradient-to-br from-white/10 to-transparent">
           <div className="absolute inset-0 flex items-center justify-center">
             <BottleSilhouette
@@ -69,7 +59,7 @@ export default function ProductSpotlight() {
           {product.imageUrl && (
             <Image
               src={product.imageUrl}
-              alt={product.name}
+              alt={`${product.name} perfume by Master Perfume`}
               fill
               sizes="(max-width: 640px) 100vw, 50vw"
               className="object-cover"

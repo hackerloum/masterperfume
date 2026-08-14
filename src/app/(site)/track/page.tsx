@@ -1,12 +1,15 @@
-import type { Metadata } from "next";
 import { Suspense } from "react";
 import TrackOrder from "@/components/TrackOrder";
 import Spinner from "@/components/Spinner";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Track Order",
-  description: "Track your Master Perfume order status with your order code.",
-};
+  description:
+    "Track your Master Perfume order in Tanzania with your order code.",
+  path: "/track",
+  noIndex: true,
+});
 
 export default function TrackPage() {
   return (

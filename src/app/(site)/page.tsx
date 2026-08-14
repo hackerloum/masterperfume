@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import HeroBanner from "@/components/HeroBanner";
 import PromoTiles from "@/components/PromoTiles";
 import Benefits from "@/components/Benefits";
@@ -9,16 +10,48 @@ import CategoryShowcase from "@/components/CategoryShowcase";
 import RecentlyViewed from "@/components/RecentlyViewed";
 import CtaBand from "@/components/CtaBand";
 import StickyCTA from "@/components/StickyCTA";
+import JsonLd from "@/components/JsonLd";
+import {
+  fetchActiveBanners,
+  fetchFeaturedProducts,
+  fetchProducts,
+} from "@/lib/data";
+import { itemListJsonLd, pageMetadata, storeJsonLd } from "@/lib/seo";
 
-export default function HomePage() {
+export const revalidate = 3600;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const featured = await fetchFeaturedProducts();
+  const image = featured.find((p) => p.imageUrl)?.imageUrl;
+  return pageMetadata({
+    title: "Perfume Shop in Tanzania",
+    description:
+      "Master Perfume — buy long-lasting perfume in Tanzania. Mixed fresh (perfume za kupima) into the bottle you choose. Order on WhatsApp, no account needed.",
+    path: "/",
+    images: image ? [image] : undefined,
+  });
+}
+
+export default async function HomePage() {
+  const [products, featured, banners] = await Promise.all([
+    fetchProducts(),
+    fetchFeaturedProducts(),
+    fetchActiveBanners(),
+  ]);
+  const onSale = products
+    .filter((p) => p.discountPercent > 0)
+    .sort((a, b) => b.discountPercent - a.discountPercent);
+
   return (
     <>
-      <HeroBanner />
+      <JsonLd data={storeJsonLd()} />
+      <JsonLd data={itemListJsonLd(products)} />
+      <HeroBanner banners={banners} />
       <PromoTiles />
-      <OnSale />
-      <FeaturedProducts />
-      <ProductSpotlight />
-      <HomeRows />
+      <OnSale products={onSale} />
+      <FeaturedProducts products={featured} />
+      <ProductSpotlight product={featured[0] ?? null} />
+      <HomeRows products={products} />
       <CategoryShowcase />
       <div className="container-px">
         <RecentlyViewed />

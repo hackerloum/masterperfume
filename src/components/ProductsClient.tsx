@@ -25,13 +25,17 @@ function fromPrice(p: Product): number {
   return salePrice(Math.min(...p.sizes.map((s) => s.price)), p.discountPercent);
 }
 
-export default function ProductsClient() {
+export default function ProductsClient({
+  initialProducts,
+}: {
+  initialProducts: Product[];
+}) {
   const searchParams = useSearchParams();
   const initialCategory = CATEGORIES.find(
     (c) => c === searchParams.get("category")
   );
 
-  const [products, setProducts] = useState<Product[] | null>(null);
+  const [products, setProducts] = useState<Product[] | null>(initialProducts);
   const [error, setError] = useState(false);
   const [filter, setFilter] = useState<Filter>(initialCategory ?? "All");
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
@@ -39,10 +43,14 @@ export default function ProductsClient() {
   const [sort, setSort] = useState<Sort>(initialSort?.id ?? "featured");
 
   useEffect(() => {
+    if (initialProducts.length) {
+      setProducts(initialProducts);
+      return;
+    }
     fetchProducts()
       .then(setProducts)
       .catch(() => setError(true));
-  }, []);
+  }, [initialProducts]);
 
   const visible = useMemo(() => {
     if (!products) return [];

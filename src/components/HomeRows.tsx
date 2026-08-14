@@ -1,8 +1,4 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
-import { fetchProducts } from "@/lib/data";
 import { soldFor } from "@/lib/social";
 import type { Product } from "@/types";
 
@@ -36,22 +32,16 @@ function Row({
 }
 
 /** New Arrivals / Best Sellers / Trending rows (dynamic from the catalog). */
-export default function HomeRows() {
-  const [all, setAll] = useState<Product[]>([]);
+export default function HomeRows({ products }: { products: Product[] }) {
+  if (products.length === 0) return null;
 
-  useEffect(() => {
-    fetchProducts()
-      .then(setAll)
-      .catch(() => setAll([]));
-  }, []);
-
-  if (all.length === 0) return null;
-
-  const newArrivals = [...all].sort((a, b) => b.createdAt - a.createdAt).slice(0, 12);
-  const bestSellers = [...all]
+  const newArrivals = [...products]
+    .sort((a, b) => b.createdAt - a.createdAt)
+    .slice(0, 12);
+  const bestSellers = [...products]
     .sort((a, b) => soldFor(b.id) - soldFor(a.id))
     .slice(0, 12);
-  const trending = [...all]
+  const trending = [...products]
     .filter((p) => p.isFeatured || p.discountPercent > 0)
     .slice(0, 12);
 

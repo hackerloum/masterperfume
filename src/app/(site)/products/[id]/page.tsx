@@ -1,37 +1,61 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import ProductDetail from "@/components/ProductDetail";
-import { fetchProduct } from "@/lib/data";
+import JsonLd from "@/components/JsonLd";
+import { fetchActiveBottles, fetchProduct, fetchProducts } from "@/lib/data";
+import {
+  breadcrumbJsonLd,
+  productJsonLd,
+  productMetadata,
+} from "@/lib/seo";
 
-/** Per-product SEO title/description so Google indexes each perfume. */
+export const revalidate = 3600;
+
+export async function generateStaticParams() {
+  try {
+    const products = await fetchProducts();
+    return products.map((p) => ({ id: p.id }));
+  } catch {
+    return [];
+  }
+}
+
 export async function generateMetadata({
   params,
 }: {
   params: { id: string };
 }): Promise<Metadata> {
-  try {
-    const product = await fetchProduct(params.id);
-    if (!product) return { title: "Perfume" };
-    const desc =
-      product.description?.slice(0, 155) ||
-      `Order ${product.name} perfume from Master Perfume.`;
-    return {
-      title: product.name,
-      description: desc,
-      openGraph: {
-        title: product.name,
-        description: desc,
-        images: product.imageUrl ? [product.imageUrl] : undefined,
-      },
-    };
-  } catch {
-    return { title: "Perfume" };
-  }
+  const product = await fetchProduct(params.id);
+  if (!product) return { title: "Perfume not found", robots: { index: false } };
+  return productMetadata(product);
 }
 
-export default function ProductDetailPage({
+export default async function ProductDetailPage({
   params,
 }: {
   params: { id: string };
 }) {
-  return <ProductDetail id={params.id} />;
+  const [product, bottles] = await Promise.all([
+    fetchProduct(params.id),
+    fetchActiveBottles(),
+  ]);
+  if (!product) notFound();
+
+  return (
+    <>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Perfumes", path: "/products" },
+          { name: product.name, path: `/products/${product.id}` },
+        ])}
+      />
+      <JsonLd data={productJsonLd(product)} />
+      <ProductDetail
+        id={params.id}
+        initialProduct={product}
+        initialBottles={bottles}
+      />
+    </>
+  );
 }

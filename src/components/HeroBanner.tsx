@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Hero from "./Hero";
-import { fetchActiveBanners } from "@/lib/data";
 import { IconArrowRight } from "./icons";
 import type { Banner } from "@/types";
 
@@ -12,32 +11,18 @@ import type { Banner } from "@/types";
  * Homepage hero. Shows an admin-managed rotating banner carousel when banners
  * exist; otherwise falls back to the default <Hero/>.
  */
-export default function HeroBanner() {
-  const [banners, setBanners] = useState<Banner[] | null>(null);
+export default function HeroBanner({ banners }: { banners: Banner[] }) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    fetchActiveBanners()
-      .then(setBanners)
-      .catch(() => setBanners([]));
-  }, []);
-
-  // Auto-advance every 5s when there's more than one banner.
-  useEffect(() => {
-    if (!banners || banners.length < 2) return;
+    if (banners.length < 2) return;
     const t = setInterval(
       () => setIndex((i) => (i + 1) % banners.length),
       5000
     );
     return () => clearInterval(t);
-  }, [banners]);
+  }, [banners.length]);
 
-  // Still loading — render nothing tall to avoid layout flash.
-  if (banners === null) {
-    return <div className="h-[2px]" />;
-  }
-
-  // No banners configured → default hero.
   if (banners.length === 0) {
     return <Hero />;
   }
@@ -57,7 +42,7 @@ export default function HeroBanner() {
           >
             <Image
               src={b.imageUrl}
-              alt={b.title}
+              alt={b.title || "Master Perfume promotional banner"}
               fill
               priority={i === 0}
               sizes="100vw"
@@ -67,7 +52,6 @@ export default function HeroBanner() {
           </div>
         ))}
 
-        {/* Content for the current slide */}
         <div className="relative flex h-full flex-col justify-center p-7 sm:max-w-lg sm:p-12">
           {current.title && (
             <h1 className="font-serif text-3xl font-800 leading-tight text-white sm:text-5xl">
@@ -90,7 +74,6 @@ export default function HeroBanner() {
           </div>
         </div>
 
-        {/* Dots */}
         {banners.length > 1 && (
           <div className="absolute inset-x-0 bottom-4 flex justify-center gap-2">
             {banners.map((b, i) => (

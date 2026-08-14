@@ -14,8 +14,9 @@ export default function Footer() {
             <span className="text-sm font-medium text-accent">perfume</span>
           </Link>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-ink/50">
-            {siteConfig.slogan}. Premium fragrances, mixed to order and delivered
-            to your door.
+            {siteConfig.slogan}. Buy perfume in Tanzania — long-lasting
+            fragrances mixed to order (perfume za kupima) and delivered to your
+            door.
           </p>
         </div>
 
@@ -32,6 +33,30 @@ export default function Footer() {
             <li>
               <Link href="/products" className="transition hover:text-accent">
                 All perfumes
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/products?category=Men"
+                className="transition hover:text-accent"
+              >
+                Men&apos;s perfume
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/products?category=Women"
+                className="transition hover:text-accent"
+              >
+                Women&apos;s perfume
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/products?category=Unisex"
+                className="transition hover:text-accent"
+              >
+                Unisex perfume
               </Link>
             </li>
             <li>
