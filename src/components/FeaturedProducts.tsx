@@ -4,7 +4,8 @@ import type { Product } from "@/types";
 
 export default function FeaturedProducts({ products }: { products: Product[] }) {
   return (
-    <section className="container-px py-4 sm:py-6">
+    <section className="container-px py-3 sm:py-4">
+      <div className="rounded-lg border border-ink/10 bg-white p-3 sm:p-4">
       <div className="section-head">
         <h2 className="section-title">Featured perfumes</h2>
         <Link href="/products" className="section-link">
@@ -25,6 +26,7 @@ export default function FeaturedProducts({ products }: { products: Product[] }) 
           ))}
         </div>
       )}
+      </div>
     </section>
   );
 }

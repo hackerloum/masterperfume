@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import HeroBanner from "@/components/HeroBanner";
+import HomeMosaic from "@/components/HomeMosaic";
 import PromoTiles from "@/components/PromoTiles";
 import Benefits from "@/components/Benefits";
 import OnSale from "@/components/OnSale";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import ProductSpotlight from "@/components/ProductSpotlight";
 import HomeRows from "@/components/HomeRows";
-import CategoryShowcase from "@/components/CategoryShowcase";
 import RecentlyViewed from "@/components/RecentlyViewed";
 import CtaBand from "@/components/CtaBand";
 import StickyCTA from "@/components/StickyCTA";
@@ -46,10 +45,9 @@ export default async function HomePage() {
     <>
       <JsonLd data={storeJsonLd()} />
       <JsonLd data={itemListJsonLd(products)} />
-      <HeroBanner banners={banners} />
+      <HomeMosaic banners={banners} featured={featured} deals={onSale} />
       <Benefits />
       <PromoTiles />
-      <CategoryShowcase />
       <OnSale products={onSale} />
       <FeaturedProducts products={featured} />
       <HomeRows products={products} />

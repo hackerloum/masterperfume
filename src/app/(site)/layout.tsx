@@ -1,9 +1,9 @@
+import { Suspense } from "react";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Providers from "@/components/Providers";
 
-/** Layout for the public storefront (adds the announcement bar, navbar + footer). */
 export default function SiteLayout({
   children,
 }: {
@@ -13,7 +13,9 @@ export default function SiteLayout({
     <Providers>
       <div className="flex min-h-screen flex-col">
         <AnnouncementBar />
-        <Navbar />
+        <Suspense fallback={<div className="h-[7.5rem] bg-white" />}>
+          <Navbar />
+        </Suspense>
         <main className="flex-1">{children}</main>
         <Footer />
       </div>

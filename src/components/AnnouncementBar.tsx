@@ -1,20 +1,31 @@
+"use client";
+
 const messages = [
   "Free delivery within town",
   "Perfumes mixed fresh to order",
-  "Order now on WhatsApp",
+  "Order on WhatsApp — no account needed",
+  "Today's deals ending soon",
+  "Men · Women · Unisex bottles in stock",
 ];
 
-/** Thin promotional strip above the navbar. */
+/** Scrolling promo ticker. */
 export default function AnnouncementBar() {
+  const row = (
+    <div className="flex shrink-0 items-center gap-8 pr-8">
+      {messages.map((m) => (
+        <span key={m} className="flex items-center gap-8 whitespace-nowrap">
+          <span>{m}</span>
+          <span className="text-ink/35">•</span>
+        </span>
+      ))}
+    </div>
+  );
+
   return (
-    <div className="bg-accent text-ink">
-      <div className="container-px flex h-8 items-center justify-center gap-3 overflow-hidden text-[0.72rem] font-semibold">
-        {messages.map((m, i) => (
-          <span key={m} className="flex items-center gap-3 whitespace-nowrap">
-            {i > 0 && <span className="text-ink/40">•</span>}
-            <span className={i === 2 ? "hidden sm:inline" : ""}>{m}</span>
-          </span>
-        ))}
+    <div className="overflow-hidden bg-ink text-[0.72rem] font-semibold text-accent">
+      <div className="flex h-8 w-max items-center animate-marquee">
+        {row}
+        {row}
       </div>
     </div>
   );
